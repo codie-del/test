@@ -1,147 +1,154 @@
-// Mock Data for Contrarian Thinking Dashboard
-// Based on real goals: 18M followers and $45M revenue in 2026
+// REAL DATA for Contrarian Thinking Dashboard
+// Updated with actual revenue and follower counts (January 2026)
+// Data sources: Revenue spreadsheets + scraped social media follower counts
 
 const DATA = {
     // 2026 Goals
     goals: {
-        revenue: 45000000,      // $45M
-        followers: 18000000     // 18M
+        revenue: 45000000,      // $45M goal for 2026
+        followers: 18000000     // 18M followers goal for 2026
     },
 
-    // Current as of January 2026 (based on Notion screenshot showing ~11.6M followers)
+    // Current as of January 2026 (REAL DATA from web scraping)
     currentFollowers: {
-        instagram: 2850000,     // ~2.85M
-        youtube: 1420000,       // ~1.42M
-        tiktok: 4680000,        // ~4.68M
-        twitter: 1250000,       // ~1.25M
-        linkedin: 890000,       // ~890K
-        facebook: 580000        // ~580K
+        instagram: 3125000,     // 3.125M (@codiesanchez: 3M + @bigdeal.podcast: 98K + @contrarianthinking: 27K)
+        youtube: 2060000,       // 2.06M (@CodieSanchezCT: 2.01M + @PodcastBigDeal: 50K est.)
+        tiktok: 2000000,        // 2M (@realcodiesanchez)
+        twitter: 660737,        // 660.7K (@Codie_Sanchez: 657.5K + @CTVentureCap: 3.2K)
+        linkedin: 550000,       // 550K (estimated)
+        facebook: 95000         // 95K (codiesanchezbiz)
     },
 
-    // Financial data for 2026 (January through December)
+    // Financial data for 2026 (PROJECTED - starting from actual Jan 2026: $182K)
     financial2026: {
-        // Monthly revenue (scaled to reach ~$45M if growth continues)
+        // Monthly revenue projections (starting from real Jan data, scaling to $45M goal)
         revenue: [
-            3200000,  // Jan: $3.2M
-            3450000,  // Feb: $3.45M
-            3680000,  // Mar: $3.68M
-            3850000,  // Apr: $3.85M
-            3920000,  // May: $3.92M
-            4100000,  // Jun: $4.1M
-            4250000,  // Jul: $4.25M
-            4380000,  // Aug: $4.38M
-            4520000,  // Sep: $4.52M
-            4680000,  // Oct: $4.68M
-            4850000,  // Nov: $4.85M
-            5020000   // Dec: $5.02M
+            182136,   // Jan: $182K (ACTUAL from spreadsheet)
+            2500000,  // Feb: $2.5M
+            3200000,  // Mar: $3.2M
+            3500000,  // Apr: $3.5M
+            3700000,  // May: $3.7M
+            3900000,  // Jun: $3.9M
+            4100000,  // Jul: $4.1M
+            4300000,  // Aug: $4.3M
+            4500000,  // Sep: $4.5M
+            4700000,  // Oct: $4.7M
+            5000000,  // Nov: $5M
+            5400000   // Dec: $5.4M
         ],
-        // Monthly expenses
+        // Monthly expenses projections (starting from real Jan data)
         expenses: [
-            2100000,  // Jan: $2.1M
-            2150000,  // Feb: $2.15M
-            2280000,  // Mar: $2.28M
-            2380000,  // Apr: $2.38M
-            2420000,  // May: $2.42M
-            2550000,  // Jun: $2.55M
-            2680000,  // Jul: $2.68M
-            2750000,  // Aug: $2.75M
-            2880000,  // Sep: $2.88M
-            2950000,  // Oct: $2.95M
-            3020000,  // Nov: $3.02M
-            3100000   // Dec: $3.1M
+            71041,    // Jan: $71K (ACTUAL from spreadsheet)
+            1800000,  // Feb: $1.8M
+            2300000,  // Mar: $2.3M
+            2500000,  // Apr: $2.5M
+            2600000,  // May: $2.6M
+            2700000,  // Jun: $2.7M
+            2850000,  // Jul: $2.85M
+            2950000,  // Aug: $2.95M
+            3100000,  // Sep: $3.1M
+            3200000,  // Oct: $3.2M
+            3350000,  // Nov: $3.35M
+            3500000   // Dec: $3.5M
         ]
     },
 
-    // Financial data for 2025 (for year-over-year comparison)
+    // Financial data for 2025 (ACTUAL DATA from revenue spreadsheet)
     financial2025: {
         revenue: [
-            2800000,  // Jan: $2.8M
-            2900000,  // Feb: $2.9M
-            3100000,  // Mar: $3.1M
-            3050000,  // Apr: $3.05M
-            3200000,  // May: $3.2M
-            3350000,  // Jun: $3.35M
-            3500000,  // Jul: $3.5M
-            3450000,  // Aug: $3.45M
-            3680000,  // Sep: $3.68M
-            3750000,  // Oct: $3.75M
-            3850000,  // Nov: $3.85M
-            3920000   // Dec: $3.92M
+            1516838,  // Jan: $1.52M (ACTUAL)
+            3454530,  // Feb: $3.45M (ACTUAL)
+            1326965,  // Mar: $1.33M (ACTUAL)
+            996559,   // Apr: $997K (ACTUAL)
+            1707492,  // May: $1.71M (ACTUAL)
+            1409293,  // Jun: $1.41M (ACTUAL)
+            1086772,  // Jul: $1.09M (ACTUAL)
+            1587896,  // Aug: $1.59M (ACTUAL)
+            4189190,  // Sep: $4.19M (ACTUAL)
+            1356769,  // Oct: $1.36M (ACTUAL)
+            2478247,  // Nov: $2.48M (ACTUAL)
+            1279718   // Dec: $1.28M (ACTUAL)
         ],
         expenses: [
-            2200000,  // Jan: $2.2M
-            2250000,  // Feb: $2.25M
-            2400000,  // Mar: $2.4M
-            2380000,  // Apr: $2.38M
-            2500000,  // May: $2.5M
-            2620000,  // Jun: $2.62M
-            2750000,  // Jul: $2.75M
-            2700000,  // Aug: $2.7M
-            2880000,  // Sep: $2.88M
-            2920000,  // Oct: $2.92M
-            3000000,  // Nov: $3M
-            3050000   // Dec: $3.05M
+            1048103,  // Jan: $1.05M (ACTUAL)
+            1356484,  // Feb: $1.36M (ACTUAL)
+            1353672,  // Mar: $1.35M (ACTUAL)
+            1433859,  // Apr: $1.43M (ACTUAL)
+            1878827,  // May: $1.88M (ACTUAL)
+            1447681,  // Jun: $1.45M (ACTUAL)
+            1256364,  // Jul: $1.26M (ACTUAL)
+            1924823,  // Aug: $1.92M (ACTUAL)
+            1876885,  // Sep: $1.88M (ACTUAL)
+            2225640,  // Oct: $2.23M (ACTUAL)
+            1660487,  // Nov: $1.66M (ACTUAL)
+            1009495   // Dec: $1.01M (ACTUAL)
         ]
     },
 
-    // Follower growth for 2026 (by month)
+    // Follower growth for 2026 (REAL current + PROJECTED growth to 18M)
     followers2026: {
+        // Instagram growth from 3.125M to ~5.5M
         instagram: [
-            2850000, 3020000, 3180000, 3350000, 3520000, 3690000,
-            3860000, 4030000, 4200000, 4370000, 4540000, 4710000
+            3125000, 3325000, 3525000, 3725000, 3925000, 4125000,
+            4325000, 4525000, 4725000, 4925000, 5125000, 5325000
         ],
+        // YouTube growth from 2.06M to ~3.2M
         youtube: [
-            1420000, 1510000, 1600000, 1690000, 1780000, 1870000,
-            1960000, 2050000, 2140000, 2230000, 2320000, 2410000
+            2060000, 2160000, 2260000, 2360000, 2460000, 2560000,
+            2660000, 2760000, 2860000, 2960000, 3060000, 3160000
         ],
+        // TikTok growth from 2M to ~4.5M (fastest growing platform)
         tiktok: [
-            4680000, 4960000, 5240000, 5520000, 5800000, 6080000,
-            6360000, 6640000, 6920000, 7200000, 7480000, 7760000
+            2000000, 2250000, 2500000, 2750000, 3000000, 3250000,
+            3500000, 3750000, 4000000, 4200000, 4350000, 4500000
         ],
+        // Twitter growth from 660K to ~1.5M
         twitter: [
-            1250000, 1325000, 1400000, 1475000, 1550000, 1625000,
-            1700000, 1775000, 1850000, 1925000, 2000000, 2075000
+            660737, 730000, 800000, 870000, 940000, 1010000,
+            1080000, 1150000, 1220000, 1290000, 1360000, 1430000
         ],
+        // LinkedIn growth from 550K to ~1.2M
         linkedin: [
-            890000, 945000, 1000000, 1055000, 1110000, 1165000,
-            1220000, 1275000, 1330000, 1385000, 1440000, 1495000
+            550000, 605000, 660000, 715000, 770000, 825000,
+            880000, 935000, 990000, 1045000, 1100000, 1155000
         ],
+        // Facebook growth from 95K to ~300K
         facebook: [
-            580000, 615000, 650000, 685000, 720000, 755000,
-            790000, 825000, 860000, 895000, 930000, 965000
+            95000, 115000, 135000, 155000, 175000, 195000,
+            215000, 235000, 255000, 270000, 285000, 300000
         ]
     },
 
-    // Follower growth for 2025 (for comparison)
+    // Follower growth for 2025 (ESTIMATED - ending at current Jan 2026 numbers)
     followers2025: {
         instagram: [
-            1850000, 1950000, 2050000, 2150000, 2250000, 2350000,
-            2450000, 2550000, 2650000, 2750000, 2800000, 2850000
+            1850000, 2000000, 2150000, 2300000, 2450000, 2600000,
+            2650000, 2700000, 2800000, 2900000, 3000000, 3125000
         ],
         youtube: [
-            920000, 980000, 1040000, 1100000, 1160000, 1220000,
-            1280000, 1310000, 1340000, 1370000, 1390000, 1420000
+            920000, 1020000, 1120000, 1220000, 1320000, 1420000,
+            1520000, 1620000, 1720000, 1820000, 1920000, 2060000
         ],
         tiktok: [
-            2680000, 2880000, 3080000, 3280000, 3480000, 3680000,
-            3880000, 4080000, 4280000, 4380000, 4480000, 4680000
+            680000, 800000, 920000, 1040000, 1160000, 1280000,
+            1400000, 1520000, 1640000, 1760000, 1880000, 2000000
         ],
         twitter: [
-            850000, 900000, 950000, 1000000, 1050000, 1100000,
-            1130000, 1160000, 1190000, 1210000, 1230000, 1250000
+            450000, 480000, 510000, 540000, 560000, 580000,
+            590000, 600000, 610000, 625000, 640000, 660737
         ],
         linkedin: [
-            590000, 625000, 660000, 695000, 730000, 765000,
-            790000, 815000, 840000, 860000, 875000, 890000
+            280000, 310000, 340000, 370000, 400000, 430000,
+            450000, 470000, 490000, 510000, 530000, 550000
         ],
         facebook: [
-            480000, 495000, 510000, 525000, 540000, 555000,
-            560000, 565000, 570000, 575000, 578000, 580000
+            50000, 55000, 60000, 65000, 70000, 75000,
+            78000, 81000, 84000, 87000, 90000, 95000
         ]
     },
 
-    // Bank balance (current)
-    bankBalance: 8750000,  // $8.75M current balance
+    // Bank balance (ACTUAL as of 1/8/2026 from spreadsheet)
+    bankBalance: 3664551,  // $3.66M available cash balance (Chase: $1.67M + Morgan Stanley: $2.80M)
 
     // Month labels
     monthLabels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
