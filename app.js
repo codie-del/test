@@ -1,4 +1,4 @@
-// Contrarian Thinking Dashboard - Main Application Logic
+// Contrarian Thinking Dashboard - Enhanced Application Logic with Pacing & Goals
 
 // Global variables
 let revenueExpensesChart = null;
@@ -17,6 +17,9 @@ function initializeDashboard() {
     // Set current month and year in selectors
     document.getElementById('monthSelector').value = currentMonth;
     document.getElementById('yearSelector').value = currentYear;
+
+    // Update month progress in header
+    updateMonthProgress();
 
     // Update last updated time
     updateLastUpdatedTime();
@@ -47,13 +50,26 @@ function setupEventListeners() {
     });
 }
 
+// Update month progress percentage
+function updateMonthProgress() {
+    const now = new Date();
+    const month = now.getMonth();
+    const day = now.getDate();
+    const daysInMonth = new Date(now.getFullYear(), month + 1, 0).getDate();
+    const percentThrough = ((day / daysInMonth) * 100).toFixed(1);
+
+    document.getElementById('monthProgress').textContent = `${percentThrough}% through ${DATA.monthLabels[month]}`;
+}
+
 // Update entire dashboard
 function updateDashboard() {
-    updateFinancialMetrics();
+    updateMonthlyFinancialSummary();
+    updateYearlyFinancialSummary();
     updateFollowerMetrics();
     updateRevenueExpensesChart();
     updateFollowerGrowthChart();
     updateGoalsTracker();
+    updateCurrentMonthYear();
 }
 
 // Update last updated timestamp
@@ -70,36 +86,98 @@ function updateLastUpdatedTime() {
     document.getElementById('lastUpdated').textContent = formatted;
 }
 
-// Update financial metrics cards
-function updateFinancialMetrics() {
-    const revenue2026 = DATA.financial2026.revenue[currentMonth];
-    const expenses2026 = DATA.financial2026.expenses[currentMonth];
-    const profit2026 = revenue2026 - expenses2026;
-
-    const revenue2025 = DATA.financial2025.revenue[currentMonth];
-    const expenses2025 = DATA.financial2025.expenses[currentMonth];
-    const profit2025 = revenue2025 - expenses2025;
-
-    // Revenue
-    document.getElementById('revenueValue').textContent = formatCurrency(revenue2026);
-    const revenueChange = calculateYoYChange(revenue2026, revenue2025);
-    updateChangeDisplay('revenueChange', revenueChange);
-
-    // Expenses
-    document.getElementById('expensesValue').textContent = formatCurrency(expenses2026);
-    const expensesChange = calculateYoYChange(expenses2026, expenses2025);
-    updateChangeDisplay('expensesChange', expensesChange, true); // Reverse colors for expenses
-
-    // Profit
-    document.getElementById('profitValue').textContent = formatCurrency(profit2026);
-    const profitChange = calculateYoYChange(profit2026, profit2025);
-    updateChangeDisplay('profitChange', profitChange);
-
-    // Bank Balance
-    document.getElementById('bankValue').textContent = formatCurrency(DATA.bankBalance);
+// Update current month/year display
+function updateCurrentMonthYear() {
+    document.getElementById('currentMonthYear').textContent = `${DATA.monthLabels[currentMonth]} ${currentYear}`;
 }
 
-// Update follower metrics cards
+// Update Monthly Financial Summary
+function updateMonthlyFinancialSummary() {
+    const revenue = currentYear === 2026 ? DATA.financial2026.revenue[currentMonth] : DATA.financial2025.revenue[currentMonth];
+    const expenses = currentYear === 2026 ? DATA.financial2026.expenses[currentMonth] : DATA.financial2025.expenses[currentMonth];
+    const profit = revenue - expenses;
+    const profitMargin = revenue > 0 ? ((profit / revenue) * 100).toFixed(1) : 0;
+
+    // Revenue
+    document.getElementById('monthlyRevenueValue').textContent = formatCurrency(revenue);
+
+    // Calculate pacing for revenue (comparing to monthly target)
+    const monthlyRevenueTarget = DATA.goals.revenue / 12;
+    const revenuePacingPercent = ((revenue / monthlyRevenueTarget) * 100).toFixed(1);
+    const revenuePacing = getPacingStatus(revenue, monthlyRevenueTarget);
+    document.getElementById('monthlyRevenuePacing').textContent = revenuePacing.text;
+    document.getElementById('monthlyRevenuePacing').className = `pacing ${revenuePacing.class}`;
+
+    const revenueToGoal = ((revenue / monthlyRevenueTarget) * 100).toFixed(1);
+    document.getElementById('monthlyRevenueToGoal').textContent = `${revenueToGoal}% of monthly target`;
+
+    const revenueProgress = Math.min((revenue / monthlyRevenueTarget) * 100, 100);
+    document.getElementById('monthlyRevenueProgress').style.width = `${revenueProgress}%`;
+
+    // Expenses
+    document.getElementById('monthlyExpensesValue').textContent = formatCurrency(expenses);
+
+    // Compare to last year same month
+    const expensesLastYear = currentYear === 2026 ? DATA.financial2025.expenses[currentMonth] : 0;
+    const expensesChange = expensesLastYear > 0 ? calculateYoYChange(expenses, expensesLastYear) : 0;
+    const expensesChangeText = expensesChange >= 0 ? `↑ ${Math.abs(expensesChange).toFixed(1)}% YoY` : `↓ ${Math.abs(expensesChange).toFixed(1)}% YoY`;
+    document.getElementById('monthlyExpensesChange').textContent = expensesChangeText;
+
+    const expensesProgress = revenue > 0 ? Math.min((expenses / revenue) * 100, 100) : 0;
+    document.getElementById('monthlyExpensesProgress').style.width = `${expensesProgress}%`;
+
+    // Profit
+    document.getElementById('monthlyProfitValue').textContent = formatCurrency(profit);
+    document.getElementById('profitMargin').textContent = `${profitMargin}% margin`;
+
+    const profitProgress = revenue > 0 ? Math.min((profit / revenue) * 100, 100) : 0;
+    document.getElementById('monthlyProfitProgress').style.width = `${profitProgress}%`;
+
+    // Bank Balance
+    document.getElementById('bankBalanceValue').textContent = formatCurrency(DATA.bankBalance);
+}
+
+// Update Yearly Financial Summary
+function updateYearlyFinancialSummary() {
+    const ytdRevenue = getYTDSum(DATA.financial2026.revenue, currentMonth);
+    const ytdExpenses = getYTDSum(DATA.financial2026.expenses, currentMonth);
+    const ytdProfit = ytdRevenue - ytdExpenses;
+    const ytdProfitMargin = ytdRevenue > 0 ? ((ytdProfit / ytdRevenue) * 100).toFixed(1) : 0;
+
+    // YTD Revenue
+    document.getElementById('ytdRevenueValue').textContent = formatCurrency(ytdRevenue);
+
+    // Calculate expected revenue based on time elapsed
+    const monthsElapsed = currentMonth + 1;
+    const expectedRevenue = (DATA.goals.revenue / 12) * monthsElapsed;
+    const revenuePacing = getPacingStatus(ytdRevenue, expectedRevenue);
+    document.getElementById('ytdRevenuePacing').textContent = revenuePacing.text;
+    document.getElementById('ytdRevenuePacing').className = `pacing ${revenuePacing.class}`;
+
+    const ytdRevenueToGoal = ((ytdRevenue / DATA.goals.revenue) * 100).toFixed(1);
+    document.getElementById('ytdRevenueToGoal').textContent = `${ytdRevenueToGoal}% to $45M goal`;
+
+    document.getElementById('ytdRevenueProgressBar').style.width = `${Math.min(parseFloat(ytdRevenueToGoal), 100)}%`;
+
+    // YTD Expenses
+    document.getElementById('ytdExpensesValue').textContent = formatCurrency(ytdExpenses);
+
+    const ytdExpensesLastYear = getYTDSum(DATA.financial2025.expenses, currentMonth);
+    const ytdExpensesChange = calculateYoYChange(ytdExpenses, ytdExpensesLastYear);
+    const ytdExpensesChangeText = ytdExpensesChange >= 0 ? `↑ ${Math.abs(ytdExpensesChange).toFixed(1)}% vs 2025` : `↓ ${Math.abs(ytdExpensesChange).toFixed(1)}% vs 2025`;
+    document.getElementById('ytdExpensesVsLast').textContent = ytdExpensesChangeText;
+
+    // YTD Profit
+    document.getElementById('ytdProfitValue').textContent = formatCurrency(ytdProfit);
+    document.getElementById('ytdProfitMargin').textContent = `${ytdProfitMargin}% margin`;
+
+    const ytdProfitLastYear = getYTDSum(DATA.financial2025.revenue, currentMonth) - getYTDSum(DATA.financial2025.expenses, currentMonth);
+    const ytdProfitChange = ytdProfitLastYear > 0 ? calculateYoYChange(ytdProfit, ytdProfitLastYear) : 0;
+    const ytdProfitChangeText = ytdProfitChange >= 0 ? `↑ ${Math.abs(ytdProfitChange).toFixed(1)}% vs 2025` : `↓ ${Math.abs(ytdProfitChange).toFixed(1)}% vs 2025`;
+    document.getElementById('ytdProfitVsLast').textContent = ytdProfitChangeText;
+}
+
+// Update Follower Metrics
 function updateFollowerMetrics() {
     const platforms = ['instagram', 'youtube', 'tiktok', 'twitter', 'linkedin', 'facebook'];
     let total2026 = 0;
@@ -115,27 +193,47 @@ function updateFollowerMetrics() {
         const change = count2026 - count2025;
 
         document.getElementById(platform + 'Count').textContent = formatFollowers(count2026);
-        document.getElementById(platform + 'Change').textContent =
-            '↑ ' + formatFollowers(change) + ' from last year';
-        document.getElementById(platform + 'Change').className = 'follower-change positive';
+        document.getElementById(platform + 'Growth').textContent = '↑ ' + formatFollowers(Math.abs(change));
+
+        // Calculate percent to individual platform goal (proportional)
+        const platformGoalPortion = (DATA.goals.followers / 6); // Simplified: equal distribution
+        const platformPercent = ((count2026 / platformGoalPortion) * 100).toFixed(1);
+        document.getElementById(platform + 'ToGoal').textContent = `${platformPercent}%`;
     });
 
     // Total followers
     document.getElementById('totalFollowers').textContent = formatFollowers(total2026);
-    const totalChange = total2026 - total2025;
-    document.getElementById('totalFollowersChange').textContent =
-        '↑ ' + formatFollowers(totalChange) + ' from last year';
+
+    // Calculate pacing for followers
+    const monthsElapsed = currentMonth + 1;
+    const expectedFollowers = (DATA.goals.followers / 12) * monthsElapsed;
+    const followersPacing = getPacingStatus(total2026, expectedFollowers);
+    document.getElementById('followersPacing').textContent = followersPacing.text;
+    document.getElementById('followersPacing').className = `pacing ${followersPacing.class}`;
+
+    const followersToGoal = ((total2026 / DATA.goals.followers) * 100).toFixed(1);
+    document.getElementById('followersToGoal').textContent = `${followersToGoal}% to 18M`;
+
+    document.getElementById('followersProgressBar').style.width = `${Math.min(parseFloat(followersToGoal), 100)}%`;
 }
 
-// Update change display helper
-function updateChangeDisplay(elementId, changePercent, reverseColors = false) {
-    const element = document.getElementById(elementId);
-    const isPositive = reverseColors ? changePercent < 0 : changePercent > 0;
-    const arrow = isPositive ? '↑' : '↓';
-    const className = isPositive ? 'metric-change positive' : 'metric-change negative';
+// Get pacing status (ahead, on-track, behind)
+function getPacingStatus(actual, expected) {
+    const diff = ((actual - expected) / expected) * 100;
 
-    element.textContent = arrow + ' ' + Math.abs(changePercent).toFixed(1) + '% YoY';
-    element.className = className;
+    if (diff >= 10) {
+        return { text: '🚀 Ahead of Pace', class: 'ahead' };
+    } else if (diff >= -10) {
+        return { text: '✓ On Track', class: 'on-track' };
+    } else {
+        return { text: '⚠️ Behind Pace', class: 'behind' };
+    }
+}
+
+// Helper function to calculate YoY change
+function calculateYoYChange(current, previous) {
+    if (previous === 0) return 0;
+    return ((current - previous) / previous) * 100;
 }
 
 // Update Revenue vs Expenses Chart
@@ -152,8 +250,8 @@ function updateRevenueExpensesChart() {
         {
             label: '2026 Revenue',
             data: DATA.financial2026.revenue,
-            borderColor: '#52130C',
-            backgroundColor: 'rgba(82, 19, 12, 0.1)',
+            borderColor: '#16a34a',
+            backgroundColor: 'rgba(22, 163, 74, 0.1)',
             borderWidth: 3,
             tension: 0.4,
             fill: true
@@ -161,8 +259,8 @@ function updateRevenueExpensesChart() {
         {
             label: '2026 Expenses',
             data: DATA.financial2026.expenses,
-            borderColor: '#713718',
-            backgroundColor: 'rgba(113, 55, 24, 0.1)',
+            borderColor: '#dc2626',
+            backgroundColor: 'rgba(220, 38, 38, 0.1)',
             borderWidth: 3,
             tension: 0.4,
             fill: true,
@@ -174,8 +272,8 @@ function updateRevenueExpensesChart() {
         datasets.push({
             label: '2025 Revenue',
             data: DATA.financial2025.revenue,
-            borderColor: '#B5605A',
-            backgroundColor: 'rgba(181, 96, 90, 0.05)',
+            borderColor: '#86efac',
+            backgroundColor: 'rgba(134, 239, 172, 0.05)',
             borderWidth: 2,
             tension: 0.4,
             borderDash: [2, 2]
@@ -183,8 +281,8 @@ function updateRevenueExpensesChart() {
         datasets.push({
             label: '2025 Expenses',
             data: DATA.financial2025.expenses,
-            borderColor: '#B5C0C3',
-            backgroundColor: 'rgba(181, 192, 195, 0.05)',
+            borderColor: '#fca5a5',
+            backgroundColor: 'rgba(252, 165, 165, 0.05)',
             borderWidth: 2,
             tension: 0.4,
             borderDash: [2, 2]
@@ -206,11 +304,12 @@ function updateRevenueExpensesChart() {
                     labels: {
                         font: {
                             family: 'Inter',
-                            size: 12,
+                            size: 10,
                             weight: '600'
                         },
-                        padding: 15,
-                        usePointStyle: true
+                        padding: 10,
+                        usePointStyle: true,
+                        boxWidth: 6
                     }
                 },
                 tooltip: {
@@ -230,7 +329,7 @@ function updateRevenueExpensesChart() {
                         },
                         font: {
                             family: 'Inter',
-                            size: 11
+                            size: 9
                         }
                     },
                     grid: {
@@ -244,7 +343,7 @@ function updateRevenueExpensesChart() {
                     ticks: {
                         font: {
                             family: 'Inter',
-                            size: 11
+                            size: 9
                         }
                     }
                 }
@@ -274,27 +373,27 @@ function updateFollowerGrowthChart() {
                 {
                     label: '2026 Total Followers',
                     data: total2026,
-                    borderColor: '#616F9D',
-                    backgroundColor: 'rgba(97, 111, 157, 0.2)',
-                    borderWidth: 4,
+                    borderColor: '#ea580c',
+                    backgroundColor: 'rgba(234, 88, 12, 0.2)',
+                    borderWidth: 3,
                     tension: 0.4,
                     fill: true,
-                    pointRadius: 5,
-                    pointHoverRadius: 8,
-                    pointBackgroundColor: '#616F9D',
+                    pointRadius: 4,
+                    pointHoverRadius: 6,
+                    pointBackgroundColor: '#ea580c',
                     pointBorderColor: '#FFFFFF',
                     pointBorderWidth: 2
                 },
                 {
                     label: '2025 Total Followers',
                     data: total2025,
-                    borderColor: '#B5C0C3',
-                    backgroundColor: 'rgba(181, 192, 195, 0.1)',
+                    borderColor: '#fdba74',
+                    backgroundColor: 'rgba(253, 186, 116, 0.1)',
                     borderWidth: 2,
                     tension: 0.4,
                     borderDash: [5, 5],
-                    pointRadius: 3,
-                    pointHoverRadius: 6
+                    pointRadius: 2,
+                    pointHoverRadius: 4
                 }
             ]
         },
@@ -307,11 +406,12 @@ function updateFollowerGrowthChart() {
                     labels: {
                         font: {
                             family: 'Inter',
-                            size: 12,
+                            size: 10,
                             weight: '600'
                         },
-                        padding: 15,
-                        usePointStyle: true
+                        padding: 10,
+                        usePointStyle: true,
+                        boxWidth: 6
                     }
                 },
                 tooltip: {
@@ -331,11 +431,11 @@ function updateFollowerGrowthChart() {
                         },
                         font: {
                             family: 'Inter',
-                            size: 11
+                            size: 9
                         }
                     },
                     grid: {
-                        color: 'rgba(97, 111, 157, 0.1)'
+                        color: 'rgba(234, 88, 12, 0.1)'
                     }
                 },
                 x: {
@@ -345,7 +445,7 @@ function updateFollowerGrowthChart() {
                     ticks: {
                         font: {
                             family: 'Inter',
-                            size: 11
+                            size: 9
                         }
                     }
                 }
@@ -364,18 +464,18 @@ function updateGoalsTracker() {
     const monthsElapsed = currentMonth + 1;
     const monthsRemaining = 12 - monthsElapsed;
     const avgRevenuePerMonth = ytdRevenue / monthsElapsed;
-    const avgFollowerGrowthPerMonth = (ytdFollowers - getTotalFollowers(0, 2025)) / monthsElapsed;
+    const avgFollowerGrowthPerMonth = monthsElapsed > 0 ? (ytdFollowers - getTotalFollowers(0, 2025)) / monthsElapsed : 0;
 
     const projectedRevenue = ytdRevenue + (avgRevenuePerMonth * monthsRemaining);
     const projectedFollowers = ytdFollowers + (avgFollowerGrowthPerMonth * monthsRemaining);
 
     // Revenue goal
     const revenuePercent = (ytdRevenue / DATA.goals.revenue) * 100;
-    const revenueNeededPerMonth = (DATA.goals.revenue - ytdRevenue) / monthsRemaining;
+    const revenueNeededPerMonth = monthsRemaining > 0 ? (DATA.goals.revenue - ytdRevenue) / monthsRemaining : 0;
 
     document.getElementById('revenueGoalCurrent').textContent = formatCurrency(ytdRevenue);
-    document.getElementById('revenueGoalProgress').style.width = Math.min(revenuePercent, 100) + '%';
     document.getElementById('revenueGoalPercent').textContent = revenuePercent.toFixed(1) + '%';
+    document.getElementById('revenueGoalProgress').style.width = Math.min(revenuePercent, 100) + '%';
     document.getElementById('revenueProjected').textContent = formatCurrency(projectedRevenue);
     document.getElementById('revenueNeeded').textContent = formatCurrency(Math.max(0, revenueNeededPerMonth));
 
@@ -383,15 +483,15 @@ function updateGoalsTracker() {
     const revenueStatus = getGoalStatus(revenuePercent, monthsElapsed);
     const revenueStatusEl = document.getElementById('revenueGoalStatus');
     revenueStatusEl.textContent = revenueStatus.text;
-    revenueStatusEl.className = 'goal-status ' + revenueStatus.class;
+    revenueStatusEl.className = 'status ' + revenueStatus.class;
 
     // Follower goal
     const followerPercent = (ytdFollowers / DATA.goals.followers) * 100;
-    const followerNeededPerMonth = (DATA.goals.followers - ytdFollowers) / monthsRemaining;
+    const followerNeededPerMonth = monthsRemaining > 0 ? (DATA.goals.followers - ytdFollowers) / monthsRemaining : 0;
 
     document.getElementById('followerGoalCurrent').textContent = formatFollowers(ytdFollowers);
-    document.getElementById('followerGoalProgress').style.width = Math.min(followerPercent, 100) + '%';
     document.getElementById('followerGoalPercent').textContent = followerPercent.toFixed(1) + '%';
+    document.getElementById('followerGoalProgress').style.width = Math.min(followerPercent, 100) + '%';
     document.getElementById('followerProjected').textContent = formatFollowers(Math.round(projectedFollowers));
     document.getElementById('followerNeeded').textContent = formatFollowers(Math.round(Math.max(0, followerNeededPerMonth)));
 
@@ -399,7 +499,7 @@ function updateGoalsTracker() {
     const followerStatus = getGoalStatus(followerPercent, monthsElapsed);
     const followerStatusEl = document.getElementById('followerGoalStatus');
     followerStatusEl.textContent = followerStatus.text;
-    followerStatusEl.className = 'goal-status ' + followerStatus.class;
+    followerStatusEl.className = 'status ' + followerStatus.class;
 }
 
 // Determine goal status based on progress vs time elapsed
@@ -407,11 +507,11 @@ function getGoalStatus(percentComplete, monthsElapsed) {
     const expectedPercent = (monthsElapsed / 12) * 100;
     const diff = percentComplete - expectedPercent;
 
-    if (diff >= -5) {
-        return { text: '✓ ON TRACK', class: 'on-track' };
-    } else if (diff >= -15) {
-        return { text: '⚠️ SLIGHTLY BEHIND', class: 'slightly-behind' };
+    if (diff >= 5) {
+        return { text: '✓ Ahead of Schedule', class: 'on-track' };
+    } else if (diff >= -10) {
+        return { text: '⚠️ Slightly Behind', class: 'behind' };
     } else {
-        return { text: '⚠️ NEEDS ATTENTION', class: 'behind' };
+        return { text: '🚨 Significantly Behind', class: 'behind' };
     }
 }

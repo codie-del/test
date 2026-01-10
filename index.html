@@ -11,211 +11,352 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 </head>
 <body>
-    <div class="dashboard-container">
-        <!-- Header -->
-        <header class="dashboard-header">
+    <div class="dashboard-container compact">
+        <!-- Compact Header -->
+        <header class="dashboard-header compact">
             <div class="header-content">
                 <div class="logo-section">
-                    <div class="ct-logo">
-                        <svg width="60" height="60" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <div class="ct-logo small">
+                        <svg width="40" height="40" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
                             <ellipse cx="50" cy="50" rx="45" ry="48" fill="none" stroke="#52130C" stroke-width="3"/>
                             <text x="50" y="65" font-family="serif" font-size="48" font-style="italic" fill="#52130C" text-anchor="middle">CT</text>
                         </svg>
                     </div>
                     <div class="header-title">
                         <h1>CONTRARIAN THINKING</h1>
-                        <p class="subtitle">CEO Dashboard</p>
+                        <p class="subtitle">CEO Dashboard | <span id="monthProgress"></span></p>
                     </div>
                 </div>
                 <div class="header-controls">
-                    <select id="monthSelector" class="selector">
-                        <option value="0">January</option>
-                        <option value="1">February</option>
-                        <option value="2">March</option>
-                        <option value="3">April</option>
+                    <select id="monthSelector" class="selector compact">
+                        <option value="0">Jan</option>
+                        <option value="1">Feb</option>
+                        <option value="2">Mar</option>
+                        <option value="3">Apr</option>
                         <option value="4">May</option>
-                        <option value="5">June</option>
-                        <option value="6">July</option>
-                        <option value="7">August</option>
-                        <option value="8">September</option>
-                        <option value="9">October</option>
-                        <option value="10">November</option>
-                        <option value="11">December</option>
+                        <option value="5">Jun</option>
+                        <option value="6">Jul</option>
+                        <option value="7">Aug</option>
+                        <option value="8">Sep</option>
+                        <option value="9">Oct</option>
+                        <option value="10">Nov</option>
+                        <option value="11">Dec</option>
                     </select>
-                    <select id="yearSelector" class="selector">
+                    <select id="yearSelector" class="selector compact">
                         <option value="2026">2026</option>
                         <option value="2025">2025</option>
                     </select>
-                    <button id="refreshBtn" class="refresh-btn">↻ Refresh</button>
+                    <button id="refreshBtn" class="refresh-btn compact">↻</button>
                 </div>
             </div>
-            <div class="last-updated">Last Updated: <span id="lastUpdated"></span></div>
         </header>
 
         <!-- Main Dashboard Content -->
         <main class="dashboard-main">
-            <!-- Financial Overview Cards -->
-            <section class="metrics-section">
-                <h2 class="section-title">💰 Financial Overview</h2>
-                <div class="metrics-grid">
-                    <div class="metric-card revenue">
-                        <div class="metric-icon">📈</div>
-                        <div class="metric-content">
-                            <h3>Revenue</h3>
-                            <p class="metric-value" id="revenueValue">$0</p>
-                            <p class="metric-change" id="revenueChange">Loading...</p>
-                            <p class="metric-subtitle">Monthly Total</p>
+            <!-- Monthly Financial Summary -->
+            <section class="summary-section monthly">
+                <div class="summary-header">
+                    <h2 class="section-title compact">📊 Monthly Summary - <span id="currentMonthYear"></span></h2>
+                </div>
+                <div class="summary-grid">
+                    <div class="summary-card revenue-card">
+                        <div class="summary-label">Revenue</div>
+                        <div class="summary-value" id="monthlyRevenueValue">$0</div>
+                        <div class="summary-meta">
+                            <span class="pacing" id="monthlyRevenuePacing">--</span>
+                            <span class="to-goal" id="monthlyRevenueToGoal">--% to goal</span>
+                        </div>
+                        <div class="progress-mini">
+                            <div class="progress-fill-mini revenue" id="monthlyRevenueProgress"></div>
                         </div>
                     </div>
-                    <div class="metric-card expenses">
-                        <div class="metric-icon">💳</div>
-                        <div class="metric-content">
-                            <h3>Expenses</h3>
-                            <p class="metric-value" id="expensesValue">$0</p>
-                            <p class="metric-change" id="expensesChange">Loading...</p>
-                            <p class="metric-subtitle">Monthly Total</p>
+
+                    <div class="summary-card expense-card">
+                        <div class="summary-label">Expenses</div>
+                        <div class="summary-value" id="monthlyExpensesValue">$0</div>
+                        <div class="summary-meta">
+                            <span class="trend" id="monthlyExpensesChange">--</span>
+                        </div>
+                        <div class="progress-mini">
+                            <div class="progress-fill-mini expense" id="monthlyExpensesProgress"></div>
                         </div>
                     </div>
-                    <div class="metric-card profit">
-                        <div class="metric-icon">💎</div>
-                        <div class="metric-content">
-                            <h3>Profit</h3>
-                            <p class="metric-value" id="profitValue">$0</p>
-                            <p class="metric-change" id="profitChange">Loading...</p>
-                            <p class="metric-subtitle">Monthly Net</p>
+
+                    <div class="summary-card profit-card">
+                        <div class="summary-label">Profit</div>
+                        <div class="summary-value" id="monthlyProfitValue">$0</div>
+                        <div class="summary-meta">
+                            <span class="margin" id="profitMargin">--% margin</span>
+                        </div>
+                        <div class="progress-mini">
+                            <div class="progress-fill-mini profit" id="monthlyProfitProgress"></div>
                         </div>
                     </div>
-                    <div class="metric-card bank">
-                        <div class="metric-icon">🏦</div>
-                        <div class="metric-content">
-                            <h3>Bank Balance</h3>
-                            <p class="metric-value" id="bankValue">$0</p>
-                            <p class="metric-realtime">Real-time</p>
-                            <p class="metric-subtitle">Chase Bank</p>
+
+                    <div class="summary-card bank-card">
+                        <div class="summary-label">Bank Balance</div>
+                        <div class="summary-value" id="bankBalanceValue">$0</div>
+                        <div class="summary-meta">
+                            <span class="realtime-badge">Real-time</span>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- Revenue vs Expenses Chart -->
-            <section class="chart-section">
-                <div class="chart-header">
-                    <h2 class="section-title">📊 Revenue vs Expenses</h2>
-                    <div class="chart-controls">
-                        <label>
+            <!-- Yearly Financial Summary -->
+            <section class="summary-section yearly">
+                <div class="summary-header">
+                    <h2 class="section-title compact">📈 Year-to-Date Summary - 2026</h2>
+                </div>
+                <div class="summary-grid">
+                    <div class="summary-card revenue-card-ytd">
+                        <div class="summary-label">YTD Revenue</div>
+                        <div class="summary-value" id="ytdRevenueValue">$0</div>
+                        <div class="summary-meta">
+                            <span class="pacing" id="ytdRevenuePacing">--</span>
+                            <span class="to-goal" id="ytdRevenueToGoal">--% to $45M goal</span>
+                        </div>
+                        <div class="progress-bar-thin">
+                            <div class="progress-fill-thin revenue" id="ytdRevenueProgressBar"></div>
+                        </div>
+                    </div>
+
+                    <div class="summary-card expense-card-ytd">
+                        <div class="summary-label">YTD Expenses</div>
+                        <div class="summary-value" id="ytdExpensesValue">$0</div>
+                        <div class="summary-meta">
+                            <span class="trend" id="ytdExpensesVsLast">vs last year</span>
+                        </div>
+                    </div>
+
+                    <div class="summary-card profit-card-ytd">
+                        <div class="summary-label">YTD Profit</div>
+                        <div class="summary-value" id="ytdProfitValue">$0</div>
+                        <div class="summary-meta">
+                            <span class="margin" id="ytdProfitMargin">--% margin</span>
+                            <span class="trend" id="ytdProfitVsLast">vs last year</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Followers Summary -->
+            <section class="summary-section followers">
+                <div class="summary-header">
+                    <h2 class="section-title compact">👥 Follower Metrics</h2>
+                </div>
+                <div class="followers-compact-grid">
+                    <div class="follower-compact instagram">
+                        <span class="platform-icon">📷</span>
+                        <div class="platform-data">
+                            <div class="platform-name">Instagram</div>
+                            <div class="platform-count" id="instagramCount">0</div>
+                            <div class="platform-meta">
+                                <span class="growth" id="instagramGrowth">--</span>
+                                <span class="to-goal-small" id="instagramToGoal">--</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="follower-compact youtube">
+                        <span class="platform-icon">📺</span>
+                        <div class="platform-data">
+                            <div class="platform-name">YouTube</div>
+                            <div class="platform-count" id="youtubeCount">0</div>
+                            <div class="platform-meta">
+                                <span class="growth" id="youtubeGrowth">--</span>
+                                <span class="to-goal-small" id="youtubeToGoal">--</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="follower-compact tiktok">
+                        <span class="platform-icon">🎵</span>
+                        <div class="platform-data">
+                            <div class="platform-name">TikTok</div>
+                            <div class="platform-count" id="tiktokCount">0</div>
+                            <div class="platform-meta">
+                                <span class="growth" id="tiktokGrowth">--</span>
+                                <span class="to-goal-small" id="tiktokToGoal">--</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="follower-compact twitter">
+                        <span class="platform-icon">🐦</span>
+                        <div class="platform-data">
+                            <div class="platform-name">Twitter/X</div>
+                            <div class="platform-count" id="twitterCount">0</div>
+                            <div class="platform-meta">
+                                <span class="growth" id="twitterGrowth">--</span>
+                                <span class="to-goal-small" id="twitterToGoal">--</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="follower-compact linkedin">
+                        <span class="platform-icon">💼</span>
+                        <div class="platform-data">
+                            <div class="platform-name">LinkedIn</div>
+                            <div class="platform-count" id="linkedinCount">0</div>
+                            <div class="platform-meta">
+                                <span class="growth" id="linkedinGrowth">--</span>
+                                <span class="to-goal-small" id="linkedinToGoal">--</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="follower-compact facebook">
+                        <span class="platform-icon">👍</span>
+                        <div class="platform-data">
+                            <div class="platform-name">Facebook</div>
+                            <div class="platform-count" id="facebookCount">0</div>
+                            <div class="platform-meta">
+                                <span class="growth" id="facebookGrowth">--</span>
+                                <span class="to-goal-small" id="facebookToGoal">--</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="follower-compact total">
+                        <span class="platform-icon">🌟</span>
+                        <div class="platform-data">
+                            <div class="platform-name">TOTAL</div>
+                            <div class="platform-count large" id="totalFollowers">0</div>
+                            <div class="platform-meta">
+                                <span class="pacing" id="followersPacing">--</span>
+                                <span class="to-goal" id="followersToGoal">--% to 18M</span>
+                            </div>
+                            <div class="progress-bar-thin">
+                                <div class="progress-fill-thin followers" id="followersProgressBar"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Charts Row -->
+            <div class="charts-row">
+                <!-- Revenue vs Expenses Chart -->
+                <section class="chart-section compact">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Revenue vs Expenses</h3>
+                        <label class="chart-toggle">
                             <input type="checkbox" id="compareYearCheckbox" checked>
-                            Compare to 2025
+                            vs 2025
                         </label>
                     </div>
-                </div>
-                <div class="chart-container">
-                    <canvas id="revenueExpensesChart"></canvas>
-                </div>
-            </section>
+                    <div class="chart-container compact">
+                        <canvas id="revenueExpensesChart"></canvas>
+                    </div>
+                </section>
 
-            <!-- Followers Overview Cards -->
-            <section class="metrics-section">
-                <h2 class="section-title">👥 Social Media Followers</h2>
-                <div class="followers-grid">
-                    <div class="follower-card instagram">
-                        <h3>📷 Instagram</h3>
-                        <p class="follower-count" id="instagramCount">0</p>
-                        <p class="follower-change" id="instagramChange">Loading...</p>
+                <!-- Follower Growth Chart -->
+                <section class="chart-section compact">
+                    <h3 class="chart-title">Follower Growth Trend</h3>
+                    <div class="chart-container compact">
+                        <canvas id="followerGrowthChart"></canvas>
                     </div>
-                    <div class="follower-card youtube">
-                        <h3>📺 YouTube</h3>
-                        <p class="follower-count" id="youtubeCount">0</p>
-                        <p class="follower-change" id="youtubeChange">Loading...</p>
-                    </div>
-                    <div class="follower-card tiktok">
-                        <h3>🎵 TikTok</h3>
-                        <p class="follower-count" id="tiktokCount">0</p>
-                        <p class="follower-change" id="tiktokChange">Loading...</p>
-                    </div>
-                    <div class="follower-card twitter">
-                        <h3>🐦 Twitter/X</h3>
-                        <p class="follower-count" id="twitterCount">0</p>
-                        <p class="follower-change" id="twitterChange">Loading...</p>
-                    </div>
-                    <div class="follower-card linkedin">
-                        <h3>💼 LinkedIn</h3>
-                        <p class="follower-count" id="linkedinCount">0</p>
-                        <p class="follower-change" id="linkedinChange">Loading...</p>
-                    </div>
-                    <div class="follower-card facebook">
-                        <h3>👍 Facebook</h3>
-                        <p class="follower-count" id="facebookCount">0</p>
-                        <p class="follower-change" id="facebookChange">Loading...</p>
-                    </div>
-                    <div class="follower-card total">
-                        <h3>🌟 TOTAL</h3>
-                        <p class="follower-count" id="totalFollowers">0</p>
-                        <p class="follower-change" id="totalFollowersChange">Loading...</p>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Follower Growth Chart -->
-            <section class="chart-section">
-                <h2 class="section-title">📈 Follower Growth Trend</h2>
-                <div class="chart-container">
-                    <canvas id="followerGrowthChart"></canvas>
-                </div>
-            </section>
+                </section>
+            </div>
 
             <!-- Goals Tracker -->
-            <section class="goals-section">
-                <h2 class="section-title">🎯 2026 Goals Tracker</h2>
-                <div class="goals-container">
-                    <div class="goal-card">
-                        <div class="goal-header">
-                            <h3>Revenue Goal</h3>
-                            <div class="goal-numbers">
+            <section class="goals-section compact">
+                <h2 class="section-title compact">🎯 2026 Goals Progress</h2>
+                <div class="goals-grid">
+                    <div class="goal-card compact">
+                        <div class="goal-header-compact">
+                            <h3>Revenue Goal: $45M</h3>
+                            <div class="goal-stats">
                                 <span class="goal-current" id="revenueGoalCurrent">$0</span>
-                                <span class="goal-target">/ $45,000,000</span>
+                                <span class="goal-percent" id="revenueGoalPercent">0%</span>
                             </div>
                         </div>
-                        <div class="progress-bar">
-                            <div class="progress-fill" id="revenueGoalProgress" style="width: 0%"></div>
+                        <div class="progress-bar compact">
+                            <div class="progress-fill revenue" id="revenueGoalProgress"></div>
                         </div>
-                        <div class="goal-footer">
-                            <span class="goal-percentage" id="revenueGoalPercent">0%</span>
-                            <span class="goal-status" id="revenueGoalStatus">⚠️ CALCULATING</span>
-                        </div>
-                        <div class="goal-projection">
-                            <span>Projected: <strong id="revenueProjected">$0</strong></span>
-                            <span>Needed Avg/Month: <strong id="revenueNeeded">$0</strong></span>
+                        <div class="goal-meta">
+                            <span class="status" id="revenueGoalStatus">--</span>
+                            <span class="projection">Projected: <strong id="revenueProjected">$0</strong></span>
+                            <span class="needed">Need: <strong id="revenueNeeded">$0</strong>/mo</span>
                         </div>
                     </div>
 
-                    <div class="goal-card">
-                        <div class="goal-header">
-                            <h3>Follower Goal</h3>
-                            <div class="goal-numbers">
+                    <div class="goal-card compact">
+                        <div class="goal-header-compact">
+                            <h3>Follower Goal: 18M</h3>
+                            <div class="goal-stats">
                                 <span class="goal-current" id="followerGoalCurrent">0</span>
-                                <span class="goal-target">/ 18,000,000</span>
+                                <span class="goal-percent" id="followerGoalPercent">0%</span>
                             </div>
                         </div>
-                        <div class="progress-bar">
-                            <div class="progress-fill" id="followerGoalProgress" style="width: 0%"></div>
+                        <div class="progress-bar compact">
+                            <div class="progress-fill followers" id="followerGoalProgress"></div>
                         </div>
-                        <div class="goal-footer">
-                            <span class="goal-percentage" id="followerGoalPercent">0%</span>
-                            <span class="goal-status" id="followerGoalStatus">⚠️ CALCULATING</span>
+                        <div class="goal-meta">
+                            <span class="status" id="followerGoalStatus">--</span>
+                            <span class="projection">Projected: <strong id="followerProjected">0</strong></span>
+                            <span class="needed">Need: <strong id="followerNeeded">0</strong>/mo</span>
                         </div>
-                        <div class="goal-projection">
-                            <span>Projected: <strong id="followerProjected">0</strong></span>
-                            <span>Needed Avg/Month: <strong id="followerNeeded">0</strong></span>
-                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Account Verification Section -->
+            <section class="accounts-section">
+                <h2 class="section-title compact">🔍 Tracked Social Media Accounts</h2>
+                <div class="accounts-list">
+                    <div class="account-category">
+                        <h4>Instagram (3 accounts)</h4>
+                        <ul>
+                            <li>@codiesanchez - 3M followers</li>
+                            <li>@bigdeal.podcast - 98K followers</li>
+                            <li>@contrarianthinking - 27K followers</li>
+                        </ul>
+                    </div>
+                    <div class="account-category">
+                        <h4>YouTube (2 channels)</h4>
+                        <ul>
+                            <li>@CodieSanchezCT - 2.01M subscribers</li>
+                            <li>@PodcastBigDeal - ~50K subscribers (estimated)</li>
+                        </ul>
+                    </div>
+                    <div class="account-category">
+                        <h4>TikTok (1 account)</h4>
+                        <ul>
+                            <li>@realcodiesanchez - 2M followers</li>
+                        </ul>
+                    </div>
+                    <div class="account-category">
+                        <h4>Twitter/X (2 accounts)</h4>
+                        <ul>
+                            <li>@Codie_Sanchez - 657.5K followers</li>
+                            <li>@CTVentureCap - 3.2K followers</li>
+                        </ul>
+                    </div>
+                    <div class="account-category">
+                        <h4>LinkedIn (1 profile)</h4>
+                        <ul>
+                            <li>Codie Sanchez - 550K connections (estimated)</li>
+                        </ul>
+                    </div>
+                    <div class="account-category">
+                        <h4>Facebook (1 page)</h4>
+                        <ul>
+                            <li>codiesanchezbiz - 95K followers</li>
+                        </ul>
+                    </div>
+                    <div class="account-total">
+                        <strong>Current Total: 8.49M followers</strong>
+                        <span class="discrepancy">⚠️ Your Notion shows 11.67M - Missing ~3.18M. Please verify which accounts or platforms are missing!</span>
                     </div>
                 </div>
             </section>
         </main>
 
-        <!-- Footer -->
-        <footer class="dashboard-footer">
-            <p>Contrarian Thinking Dashboard v1.0 | Phase 1: Mock Data Mode</p>
-            <p>Ready for API integration: Stripe, Chase Bank (Plaid), Social Media APIs</p>
+        <!-- Compact Footer -->
+        <footer class="dashboard-footer compact">
+            <p>Last Updated: <span id="lastUpdated"></span> | Phase 1: Real Data | <a href="README.md">Setup Guide</a></p>
         </footer>
     </div>
 
