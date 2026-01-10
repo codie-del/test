@@ -1,0 +1,16 @@
+{
+  "name": "contrarian-thinking-dashboard",
+  "version": "1.0.0",
+  "description": "CEO Dashboard for Contrarian Thinking - Revenue, Followers, and Goals Tracking",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx http-server -p 8080",
+    "dev": "npx live-server --port=8080"
+  },
+  "keywords": ["dashboard", "analytics", "business-intelligence"],
+  "author": "Contrarian Thinking",
+  "license": "MIT",
+  "dependencies": {
+    "chart.js": "^4.4.1"
+  }
+}
