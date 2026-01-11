@@ -5,6 +5,8 @@ let revenueExpensesChart = null;
 let followerGrowthChart = null;
 let currentMonth = getCurrentMonth();
 let currentYear = 2026;
+let currentView = 'projections'; // 'actuals', 'projections', or 'scenarios'
+let selectedScenario = 'base'; // 'conservative', 'base', or 'upside'
 
 // Initialize dashboard on page load
 document.addEventListener('DOMContentLoaded', function() {
@@ -48,6 +50,28 @@ function setupEventListeners() {
     document.getElementById('compareYearCheckbox').addEventListener('change', function() {
         updateRevenueExpensesChart();
     });
+
+    // View toggle listeners
+    const viewToggles = document.querySelectorAll('.view-toggle');
+    viewToggles.forEach(toggle => {
+        toggle.addEventListener('click', function() {
+            viewToggles.forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            currentView = this.getAttribute('data-view');
+            switchView(currentView);
+        });
+    });
+
+    // Scenario card listeners
+    const scenarioCards = document.querySelectorAll('.scenario-card');
+    scenarioCards.forEach(card => {
+        card.addEventListener('click', function() {
+            scenarioCards.forEach(c => c.classList.remove('selected'));
+            this.classList.add('selected');
+            selectedScenario = this.getAttribute('data-scenario');
+            updateDashboardWithScenario();
+        });
+    });
 }
 
 // Update month progress percentage
@@ -70,6 +94,62 @@ function updateDashboard() {
     updateFollowerGrowthChart();
     updateGoalsTracker();
     updateCurrentMonthYear();
+}
+
+// Switch view between Actuals, Projections, and Scenarios
+function switchView(view) {
+    const scenariosSection = document.getElementById('scenariosSection');
+    const monthlySummary = document.querySelector('.summary-section.monthly');
+    const yearlySummary = document.querySelector('.summary-section.yearly');
+    const followersSection = document.querySelector('.summary-section.followers');
+    const chartsRow = document.querySelector('.charts-row');
+    const goalsSection = document.querySelector('.goals-section');
+    const accountsSection = document.querySelector('.accounts-section');
+
+    if (view === 'scenarios') {
+        // Show scenarios, hide everything else
+        scenariosSection.style.display = 'block';
+        monthlySummary.style.display = 'none';
+        yearlySummary.style.display = 'none';
+        followersSection.style.display = 'none';
+        chartsRow.style.display = 'none';
+        goalsSection.style.display = 'none';
+        accountsSection.style.display = 'none';
+    } else {
+        // Show normal dashboard, hide scenarios
+        scenariosSection.style.display = 'none';
+        monthlySummary.style.display = 'block';
+        yearlySummary.style.display = 'block';
+        followersSection.style.display = 'block';
+        chartsRow.style.display = 'grid';
+        goalsSection.style.display = 'block';
+        accountsSection.style.display = 'block';
+
+        if (view === 'actuals') {
+            // Show only actual data (Jan 2026)
+            updateDashboardForActuals();
+        } else {
+            // Show projections (default)
+            updateDashboard();
+        }
+    }
+}
+
+// Update dashboard with actual data only (no projections)
+function updateDashboardForActuals() {
+    // For now, just show January data
+    // In the future, this would show only confirmed actuals up to current date
+    const savedMonth = currentMonth;
+    currentMonth = 0; // January only
+    updateDashboard();
+    currentMonth = savedMonth;
+}
+
+// Update dashboard based on selected scenario
+function updateDashboardWithScenario() {
+    // This would update the charts to show the selected scenario data
+    // For now, just refresh the revenue chart with scenario data
+    updateRevenueExpensesChartWithScenario();
 }
 
 // Update last updated timestamp
@@ -288,6 +368,118 @@ function updateRevenueExpensesChart() {
             borderDash: [2, 2]
         });
     }
+
+    revenueExpensesChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: DATA.monthLabels,
+            datasets: datasets
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                    labels: {
+                        font: {
+                            family: 'Inter',
+                            size: 10,
+                            weight: '600'
+                        },
+                        padding: 10,
+                        usePointStyle: true,
+                        boxWidth: 6
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return context.dataset.label + ': ' + formatCurrency(context.parsed.y);
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value) {
+                            return formatCurrency(value);
+                        },
+                        font: {
+                            family: 'Inter',
+                            size: 9
+                        }
+                    },
+                    grid: {
+                        color: 'rgba(82, 19, 12, 0.1)'
+                    }
+                },
+                x: {
+                    grid: {
+                        display: false
+                    },
+                    ticks: {
+                        font: {
+                            family: 'Inter',
+                            size: 9
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
+
+// Update Revenue vs Expenses Chart with Scenario Data
+function updateRevenueExpensesChartWithScenario() {
+    const ctx = document.getElementById('revenueExpensesChart').getContext('2d');
+
+    // Destroy existing chart if it exists
+    if (revenueExpensesChart) {
+        revenueExpensesChart.destroy();
+    }
+
+    const scenario = DATA.scenarios[selectedScenario];
+
+    // Calculate monthly target line (linear progression to goal)
+    const monthlyTarget = DATA.goals.revenue / 12;
+    const targetLine = Array(12).fill(monthlyTarget);
+
+    const datasets = [
+        {
+            label: `${scenario.name} Revenue`,
+            data: scenario.revenue,
+            borderColor: selectedScenario === 'conservative' ? '#f97316' :
+                         selectedScenario === 'upside' ? '#16a34a' : '#2563eb',
+            backgroundColor: selectedScenario === 'conservative' ? 'rgba(249, 115, 22, 0.1)' :
+                             selectedScenario === 'upside' ? 'rgba(22, 163, 74, 0.1)' : 'rgba(37, 99, 235, 0.1)',
+            borderWidth: 3,
+            tension: 0.4,
+            fill: true
+        },
+        {
+            label: `${scenario.name} Expenses`,
+            data: scenario.expenses,
+            borderColor: '#dc2626',
+            backgroundColor: 'rgba(220, 38, 38, 0.1)',
+            borderWidth: 3,
+            tension: 0.4,
+            fill: true,
+            borderDash: [5, 5]
+        },
+        {
+            label: 'Monthly Target',
+            data: targetLine,
+            borderColor: '#6b7280',
+            backgroundColor: 'transparent',
+            borderWidth: 1,
+            tension: 0,
+            borderDash: [10, 5],
+            pointRadius: 0
+        }
+    ];
 
     revenueExpensesChart = new Chart(ctx, {
         type: 'line',

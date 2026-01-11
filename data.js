@@ -150,6 +150,118 @@ const DATA = {
     // Bank balance (ACTUAL as of 1/8/2026 from spreadsheet)
     bankBalance: 3664551,  // $3.66M available cash balance (Chase: $1.67M + Morgan Stanley: $2.80M)
 
+    // Scenario Planning Data (2026 projections under different assumptions)
+    scenarios: {
+        conservative: {
+            name: 'Conservative',
+            description: 'Slower growth, focus on profitability and cash preservation',
+            totalRevenue: 32000000,
+            decMRR: 2500000,
+            endCash: 2800000,
+            breakeven: 'Month 3',
+            revenue: [
+                182136,   // Jan (ACTUAL)
+                2000000,  // Feb
+                2400000,  // Mar
+                2500000,  // Apr
+                2600000,  // May
+                2650000,  // Jun
+                2700000,  // Jul
+                2750000,  // Aug
+                2800000,  // Sep
+                2850000,  // Oct
+                2900000,  // Nov
+                2967864   // Dec (to reach $32M)
+            ],
+            expenses: [
+                71041,    // Jan (ACTUAL)
+                1600000,  // Feb
+                1900000,  // Mar
+                2000000,  // Apr
+                2050000,  // May
+                2100000,  // Jun
+                2150000,  // Jul
+                2200000,  // Aug
+                2250000,  // Sep
+                2300000,  // Oct
+                2350000,  // Nov
+                2400000   // Dec
+            ]
+        },
+        base: {
+            name: 'Base Case',
+            description: 'Expected growth trajectory based on current trends',
+            totalRevenue: 45000000,
+            decMRR: 3750000,
+            endCash: 4200000,
+            revenueMix: '60% Advisory • 25% Pro • 15% CT Academy',
+            revenue: [
+                182136,   // Jan (ACTUAL)
+                2500000,  // Feb
+                3200000,  // Mar
+                3500000,  // Apr
+                3700000,  // May
+                3900000,  // Jun
+                4100000,  // Jul
+                4300000,  // Aug
+                4500000,  // Sep
+                4700000,  // Oct
+                5000000,  // Nov
+                5400000   // Dec (to reach $45M)
+            ],
+            expenses: [
+                71041,    // Jan (ACTUAL)
+                1800000,  // Feb
+                2300000,  // Mar
+                2500000,  // Apr
+                2600000,  // May
+                2700000,  // Jun
+                2850000,  // Jul
+                2950000,  // Aug
+                3100000,  // Sep
+                3200000,  // Oct
+                3350000,  // Nov
+                3500000   // Dec
+            ]
+        },
+        upside: {
+            name: 'Upside',
+            description: 'Accelerated growth with strong referrals and new products',
+            totalRevenue: 58000000,
+            decMRR: 5200000,
+            endCash: 6500000,
+            revenueMix: '55% Advisory • 30% Pro • 15% CT Academy',
+            revenue: [
+                182136,   // Jan (ACTUAL)
+                3000000,  // Feb
+                4000000,  // Mar
+                4500000,  // Apr
+                4800000,  // May
+                5000000,  // Jun
+                5200000,  // Jul
+                5400000,  // Aug
+                5600000,  // Sep
+                5800000,  // Oct
+                6000000,  // Nov
+                6200000   // Dec (to reach ~$55M - adjusted)
+            ],
+            expenses: [
+                71041,    // Jan (ACTUAL)
+                2000000,  // Feb
+                2600000,  // Mar
+                2800000,  // Apr
+                2950000,  // May
+                3100000,  // Jun
+                3250000,  // Jul
+                3400000,  // Aug
+                3550000,  // Sep
+                3700000,  // Oct
+                3850000,  // Nov
+                4000000   // Dec
+            ]
+        }
+    },
+
     // Month labels
     monthLabels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 };

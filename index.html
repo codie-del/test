@@ -51,8 +51,99 @@
             </div>
         </header>
 
+        <!-- View Toggles -->
+        <div class="view-toggles">
+            <button class="view-toggle active" data-view="actuals">Actuals</button>
+            <button class="view-toggle" data-view="projections">Projections</button>
+            <button class="view-toggle" data-view="scenarios">Scenarios</button>
+        </div>
+
         <!-- Main Dashboard Content -->
         <main class="dashboard-main">
+            <!-- Scenario Planning Section (shown when Scenarios view is active) -->
+            <section class="scenarios-section" id="scenariosSection" style="display: none;">
+                <h2 class="section-title compact">📊 2026 Scenario Planning</h2>
+                <div class="scenarios-grid">
+                    <!-- Conservative Scenario -->
+                    <div class="scenario-card conservative" data-scenario="conservative">
+                        <div class="scenario-header">
+                            <h3 class="scenario-title">🛡️ Conservative</h3>
+                            <span class="scenario-badge survives">Survives</span>
+                        </div>
+                        <p class="scenario-description">Slower growth, focus on profitability and cash preservation. Minimal new investments.</p>
+                        <div class="scenario-metrics">
+                            <div class="scenario-metric">
+                                <span class="scenario-metric-label">Dec 2026 MRR</span>
+                                <span class="scenario-metric-value" id="conservativeMRR">$2.5M</span>
+                            </div>
+                            <div class="scenario-metric">
+                                <span class="scenario-metric-label">End Cash Position</span>
+                                <span class="scenario-metric-value" id="conservativeCash">$2.8M</span>
+                            </div>
+                            <div class="scenario-metric">
+                                <span class="scenario-metric-label">Total 2026 Revenue</span>
+                                <span class="scenario-metric-value" id="conservativeRevenue">$32M</span>
+                            </div>
+                            <div class="scenario-breakdown">
+                                <span class="breakdown-label">Breakeven: Month 3</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Base Case Scenario -->
+                    <div class="scenario-card base selected" data-scenario="base">
+                        <div class="scenario-header">
+                            <h3 class="scenario-title">🎯 Base Case</h3>
+                            <span class="scenario-badge strong">Strong Position</span>
+                        </div>
+                        <p class="scenario-description">Expected growth trajectory based on current trends. Balanced investment in growth and profitability.</p>
+                        <div class="scenario-metrics">
+                            <div class="scenario-metric">
+                                <span class="scenario-metric-label">Dec 2026 MRR</span>
+                                <span class="scenario-metric-value" id="baseMRR">$3.75M</span>
+                            </div>
+                            <div class="scenario-metric">
+                                <span class="scenario-metric-label">End Cash Position</span>
+                                <span class="scenario-metric-value" id="baseCash">$4.2M</span>
+                            </div>
+                            <div class="scenario-metric">
+                                <span class="scenario-metric-label">Total 2026 Revenue</span>
+                                <span class="scenario-metric-value" id="baseRevenue">$45M</span>
+                            </div>
+                            <div class="scenario-breakdown">
+                                <span class="breakdown-label">Revenue Mix: 60% Advisory • 25% Pro • 15% CT Academy</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Upside Scenario -->
+                    <div class="scenario-card upside" data-scenario="upside">
+                        <div class="scenario-header">
+                            <h3 class="scenario-title">🚀 Upside</h3>
+                            <span class="scenario-badge strong">Strong Position</span>
+                        </div>
+                        <p class="scenario-description">Accelerated growth with strong referrals and new product launches. Aggressive expansion.</p>
+                        <div class="scenario-metrics">
+                            <div class="scenario-metric">
+                                <span class="scenario-metric-label">Dec 2026 MRR</span>
+                                <span class="scenario-metric-value" id="upsideMRR">$5.2M</span>
+                            </div>
+                            <div class="scenario-metric">
+                                <span class="scenario-metric-label">End Cash Position</span>
+                                <span class="scenario-metric-value" id="upsideCash">$6.5M</span>
+                            </div>
+                            <div class="scenario-metric">
+                                <span class="scenario-metric-label">Total 2026 Revenue</span>
+                                <span class="scenario-metric-value" id="upsideRevenue">$58M</span>
+                            </div>
+                            <div class="scenario-breakdown">
+                                <span class="breakdown-label">Revenue Mix: 55% Advisory • 30% Pro • 15% CT Academy</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             <!-- Monthly Financial Summary -->
             <section class="summary-section monthly">
                 <div class="summary-header">
