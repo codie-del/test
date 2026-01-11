@@ -1,30 +1,32 @@
-/* Contrarian Thinking Dashboard - Compact Version */
-/* Enhanced with better visual hierarchy and color coding */
+/* Contrarian Thinking Dashboard - Functional Color Scheme */
+/* Colors now represent status and data type, not brand */
 
 :root {
-    --primary: #52130C;
-    --secondary: #713718;
-    --accent: #B5605A;
-    --light-accent: #F6C6C3;
-    --blue: #616F9D;
-    --light-blue: #B5C0C3;
+    /* Brand colors (only for logo/header) */
+    --brand-primary: #52130C;
+    --brand-secondary: #713718;
+
+    /* Functional Status Colors */
+    --status-good: #16a34a;         /* Green - Ahead/Positive */
+    --status-good-light: #dcfce7;
+    --status-warning: #f97316;      /* Orange - At Risk */
+    --status-warning-light: #ffedd5;
+    --status-bad: #dc2626;          /* Red - Behind/Negative */
+    --status-bad-light: #fee2e2;
+    --status-neutral: #6b7280;      /* Gray - Neutral */
+    --status-neutral-light: #f3f4f6;
+
+    /* Data Type Colors */
+    --data-actual: #1F1E1C;         /* Black - Actual data */
+    --data-projection: #2563eb;     /* Blue - Projections */
+    --data-projection-light: #dbeafe;
+    --data-scenario: #7c3aed;       /* Purple - Scenarios */
+    --data-scenario-light: #ede9fe;
+
+    /* Background & UI */
     --background: #F0EDE4;
-    --dark: #1F1E1C;
     --white: #FFFFFF;
-
-    /* Financial colors */
-    --revenue-color: #16a34a;      /* Green */
-    --revenue-light: #dcfce7;
-    --expense-color: #dc2626;       /* Red */
-    --expense-light: #fee2e2;
-    --profit-color: #2563eb;        /* Blue */
-    --profit-light: #dbeafe;
-    --bank-color: #7c3aed;          /* Purple */
-    --bank-light: #ede9fe;
-
-    /* Follower colors */
-    --followers-color: #ea580c;     /* Orange */
-    --followers-light: #ffedd5;
+    --border: #d1d5db;
 
     --font-display: 'Playfair Display', serif;
     --font-body: 'Inter', sans-serif;
@@ -39,7 +41,7 @@
 body {
     font-family: var(--font-body);
     background-color: var(--background);
-    color: var(--dark);
+    color: var(--data-actual);
     line-height: 1.4;
     min-height: 100vh;
     font-size: 13px;
@@ -54,7 +56,7 @@ body {
 /* Compact Header */
 .dashboard-header.compact {
     background: var(--white);
-    border: 2px solid var(--primary);
+    border: 2px solid var(--brand-primary);
     border-radius: 6px;
     padding: 12px 16px;
     margin-bottom: 12px;
@@ -82,13 +84,13 @@ body {
     font-size: 20px;
     font-weight: 900;
     letter-spacing: 2px;
-    color: var(--primary);
+    color: var(--brand-primary);
     margin-bottom: 2px;
 }
 
 .subtitle {
     font-size: 11px;
-    color: var(--secondary);
+    color: var(--brand-secondary);
     font-weight: 500;
 }
 
@@ -100,10 +102,10 @@ body {
 
 .selector.compact {
     padding: 6px 10px;
-    border: 1px solid var(--primary);
+    border: 1px solid var(--border);
     border-radius: 4px;
     background: var(--white);
-    color: var(--dark);
+    color: var(--data-actual);
     font-family: var(--font-body);
     font-size: 12px;
     font-weight: 500;
@@ -112,7 +114,7 @@ body {
 
 .refresh-btn.compact {
     padding: 6px 12px;
-    background: var(--primary);
+    background: var(--brand-primary);
     color: var(--white);
     border: none;
     border-radius: 4px;
@@ -120,14 +122,163 @@ body {
     cursor: pointer;
 }
 
+/* View Toggles */
+.view-toggles {
+    display: flex;
+    gap: 0;
+    background: var(--status-neutral-light);
+    border-radius: 6px;
+    padding: 3px;
+    margin-bottom: 12px;
+}
+
+.view-toggle {
+    padding: 8px 20px;
+    background: transparent;
+    border: none;
+    border-radius: 4px;
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--status-neutral);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.view-toggle.active {
+    background: var(--white);
+    color: var(--data-actual);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.view-toggle:hover:not(.active) {
+    color: var(--data-actual);
+}
+
 /* Section Titles */
 .section-title.compact {
     font-family: var(--font-display);
     font-size: 16px;
-    color: var(--primary);
+    color: var(--brand-primary);
     margin-bottom: 10px;
     padding-bottom: 6px;
-    border-bottom: 2px solid var(--light-accent);
+    border-bottom: 2px solid var(--border);
+}
+
+/* Scenario Cards */
+.scenarios-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.scenario-card {
+    background: var(--white);
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+    transition: all 0.3s;
+    position: relative;
+}
+
+.scenario-card.selected {
+    border-color: var(--data-projection);
+    border-width: 3px;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
+}
+
+.scenario-card.conservative {
+    border-color: var(--status-warning);
+}
+
+.scenario-card.base {
+    border-color: var(--status-neutral);
+}
+
+.scenario-card.upside {
+    border-color: var(--status-good);
+}
+
+.scenario-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.scenario-title {
+    font-family: var(--font-display);
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--data-actual);
+}
+
+.scenario-badge {
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.scenario-badge.survives {
+    background: var(--status-good-light);
+    color: var(--status-good);
+}
+
+.scenario-badge.strong {
+    background: var(--data-projection-light);
+    color: var(--data-projection);
+}
+
+.scenario-description {
+    font-size: 12px;
+    color: var(--status-neutral);
+    margin-bottom: 16px;
+    min-height: 40px;
+}
+
+.scenario-metrics {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.scenario-metric {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.scenario-metric-label {
+    font-size: 11px;
+    color: var(--status-neutral);
+    font-weight: 600;
+}
+
+.scenario-metric-value {
+    font-family: var(--font-display);
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--data-actual);
+}
+
+.scenario-breakdown {
+    display: flex;
+    gap: 6px;
+    margin-top: 8px;
+    align-items: center;
+}
+
+.breakdown-bar {
+    height: 6px;
+    border-radius: 3px;
+}
+
+.breakdown-label {
+    font-size: 9px;
+    color: var(--status-neutral);
 }
 
 /* Summary Sections */
@@ -143,7 +294,7 @@ body {
 
 .summary-card {
     background: var(--white);
-    border: 2px solid;
+    border: 2px solid var(--border);
     border-radius: 6px;
     padding: 14px;
     transition: transform 0.2s;
@@ -151,29 +302,27 @@ body {
 
 .summary-card:hover {
     transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.08);
 }
 
-.summary-card.revenue-card,
-.summary-card.revenue-card-ytd {
-    border-color: var(--revenue-color);
-    background: linear-gradient(135deg, var(--white) 0%, var(--revenue-light) 100%);
+/* Dynamic border colors based on status */
+.summary-card.good {
+    border-color: var(--status-good);
+    background: linear-gradient(135deg, var(--white) 0%, var(--status-good-light) 100%);
 }
 
-.summary-card.expense-card,
-.summary-card.expense-card-ytd {
-    border-color: var(--expense-color);
-    background: linear-gradient(135deg, var(--white) 0%, var(--expense-light) 100%);
+.summary-card.warning {
+    border-color: var(--status-warning);
+    background: linear-gradient(135deg, var(--white) 0%, var(--status-warning-light) 100%);
 }
 
-.summary-card.profit-card,
-.summary-card.profit-card-ytd {
-    border-color: var(--profit-color);
-    background: linear-gradient(135deg, var(--white) 0%, var(--profit-light) 100%);
+.summary-card.bad {
+    border-color: var(--status-bad);
+    background: linear-gradient(135deg, var(--white) 0%, var(--status-bad-light) 100%);
 }
 
-.summary-card.bank-card {
-    border-color: var(--bank-color);
-    background: linear-gradient(135deg, var(--white) 0%, var(--bank-light) 100%);
+.summary-card.neutral {
+    border-color: var(--border);
 }
 
 .summary-label {
@@ -181,7 +330,7 @@ body {
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    color: var(--secondary);
+    color: var(--status-neutral);
     margin-bottom: 6px;
 }
 
@@ -189,7 +338,7 @@ body {
     font-family: var(--font-display);
     font-size: 26px;
     font-weight: 700;
-    color: var(--dark);
+    color: var(--data-actual);
     margin-bottom: 6px;
 }
 
@@ -209,37 +358,45 @@ body {
 }
 
 .pacing.ahead {
-    background: #dcfce7;
-    color: #16a34a;
+    background: var(--status-good-light);
+    color: var(--status-good);
 }
 
 .pacing.behind {
-    background: #fee2e2;
-    color: #dc2626;
+    background: var(--status-bad-light);
+    color: var(--status-bad);
 }
 
 .pacing.on-track {
-    background: #dbeafe;
-    color: #2563eb;
+    background: var(--data-projection-light);
+    color: var(--data-projection);
 }
 
 .to-goal {
-    color: var(--secondary);
+    color: var(--status-neutral);
     font-weight: 600;
 }
 
 .trend {
-    color: var(--secondary);
+    color: var(--status-neutral);
     font-weight: 500;
 }
 
+.trend.positive {
+    color: var(--status-good);
+}
+
+.trend.negative {
+    color: var(--status-bad);
+}
+
 .margin {
-    color: var(--profit-color);
+    color: var(--data-actual);
     font-weight: 700;
 }
 
 .realtime-badge {
-    background: var(--bank-color);
+    background: var(--data-projection);
     color: var(--white);
     padding: 2px 8px;
     border-radius: 10px;
@@ -247,9 +404,9 @@ body {
     font-weight: 700;
 }
 
-/* Progress bars */
+/* Progress bars with semantic colors */
 .progress-mini {
-    background: var(--background);
+    background: var(--status-neutral-light);
     height: 6px;
     border-radius: 3px;
     overflow: hidden;
@@ -260,20 +417,24 @@ body {
     transition: width 0.6s ease;
 }
 
-.progress-fill-mini.revenue {
-    background: var(--revenue-color);
+.progress-fill-mini.good {
+    background: var(--status-good);
 }
 
-.progress-fill-mini.expense {
-    background: var(--expense-color);
+.progress-fill-mini.warning {
+    background: var(--status-warning);
 }
 
-.progress-fill-mini.profit {
-    background: var(--profit-color);
+.progress-fill-mini.bad {
+    background: var(--status-bad);
+}
+
+.progress-fill-mini.projection {
+    background: var(--data-projection);
 }
 
 .progress-bar-thin {
-    background: var(--background);
+    background: var(--status-neutral-light);
     height: 8px;
     border-radius: 4px;
     overflow: hidden;
@@ -285,12 +446,16 @@ body {
     transition: width 0.6s ease;
 }
 
-.progress-fill-thin.revenue {
-    background: linear-gradient(90deg, var(--revenue-color), #22c55e);
+.progress-fill-thin.good {
+    background: linear-gradient(90deg, var(--status-good), #22c55e);
 }
 
-.progress-fill-thin.followers {
-    background: linear-gradient(90deg, var(--followers-color), #fb923c);
+.progress-fill-thin.warning {
+    background: linear-gradient(90deg, var(--status-warning), #fb923c);
+}
+
+.progress-fill-thin.projection {
+    background: linear-gradient(90deg, var(--data-projection), #3b82f6);
 }
 
 /* Compact Followers Grid */
@@ -302,7 +467,7 @@ body {
 
 .follower-compact {
     background: var(--white);
-    border: 1px solid var(--light-blue);
+    border: 1px solid var(--border);
     border-radius: 6px;
     padding: 12px;
     display: flex;
@@ -312,13 +477,13 @@ body {
 }
 
 .follower-compact:hover {
-    border-color: var(--blue);
+    border-color: var(--data-projection);
     transform: translateY(-2px);
 }
 
 .follower-compact.total {
-    background: linear-gradient(135deg, var(--primary), var(--secondary));
-    border-color: var(--primary);
+    background: linear-gradient(135deg, var(--brand-primary), var(--brand-secondary));
+    border-color: var(--brand-primary);
     color: var(--white);
     grid-column: span 2;
 }
@@ -337,18 +502,18 @@ body {
     text-transform: uppercase;
     letter-spacing: 0.5px;
     margin-bottom: 4px;
-    color: var(--secondary);
+    color: var(--status-neutral);
 }
 
 .follower-compact.total .platform-name {
-    color: var(--light-accent);
+    color: rgba(255,255,255,0.8);
 }
 
 .platform-count {
     font-family: var(--font-display);
     font-size: 20px;
     font-weight: 700;
-    color: var(--dark);
+    color: var(--data-actual);
     margin-bottom: 4px;
 }
 
@@ -367,17 +532,17 @@ body {
 }
 
 .growth {
-    color: #16a34a;
+    color: var(--status-good);
     font-weight: 600;
 }
 
 .to-goal-small {
-    color: var(--secondary);
+    color: var(--status-neutral);
 }
 
 .follower-compact.total .to-goal-small,
 .follower-compact.total .to-goal {
-    color: var(--light-accent);
+    color: rgba(255,255,255,0.8);
 }
 
 /* Charts Row */
@@ -390,7 +555,7 @@ body {
 
 .chart-section.compact {
     background: var(--white);
-    border: 2px solid var(--primary);
+    border: 2px solid var(--border);
     border-radius: 6px;
     padding: 14px;
 }
@@ -405,7 +570,7 @@ body {
 .chart-title {
     font-family: var(--font-display);
     font-size: 14px;
-    color: var(--primary);
+    color: var(--data-actual);
     font-weight: 700;
 }
 
@@ -434,7 +599,7 @@ body {
 
 .goal-card.compact {
     background: var(--white);
-    border: 2px solid var(--primary);
+    border: 2px solid var(--border);
     border-radius: 6px;
     padding: 16px;
 }
@@ -449,7 +614,7 @@ body {
 .goal-header-compact h3 {
     font-family: var(--font-display);
     font-size: 14px;
-    color: var(--primary);
+    color: var(--data-actual);
 }
 
 .goal-stats {
@@ -462,22 +627,22 @@ body {
     font-family: var(--font-display);
     font-size: 22px;
     font-weight: 700;
-    color: var(--primary);
+    color: var(--data-actual);
 }
 
 .goal-percent {
     font-size: 16px;
     font-weight: 700;
-    color: var(--secondary);
+    color: var(--status-neutral);
 }
 
 .progress-bar.compact {
-    background: var(--background);
+    background: var(--status-neutral-light);
     height: 20px;
     border-radius: 10px;
     overflow: hidden;
     margin-bottom: 10px;
-    border: 1px solid var(--light-blue);
+    border: 1px solid var(--border);
 }
 
 .progress-fill {
@@ -485,12 +650,16 @@ body {
     transition: width 0.6s ease;
 }
 
-.progress-fill.revenue {
-    background: linear-gradient(90deg, var(--revenue-color), #22c55e);
+.progress-fill.good {
+    background: linear-gradient(90deg, var(--status-good), #22c55e);
 }
 
-.progress-fill.followers {
-    background: linear-gradient(90deg, var(--followers-color), #fb923c);
+.progress-fill.warning {
+    background: linear-gradient(90deg, var(--status-warning), #fb923c);
+}
+
+.progress-fill.bad {
+    background: linear-gradient(90deg, var(--status-bad), #ef4444);
 }
 
 .goal-meta {
@@ -507,24 +676,24 @@ body {
 }
 
 .goal-meta .status.on-track {
-    background: #dcfce7;
-    color: #16a34a;
+    background: var(--status-good-light);
+    color: var(--status-good);
 }
 
 .goal-meta .status.behind {
-    background: #fee2e2;
-    color: #dc2626;
+    background: var(--status-bad-light);
+    color: var(--status-bad);
 }
 
 .goal-meta .projection,
 .goal-meta .needed {
-    color: var(--secondary);
+    color: var(--status-neutral);
 }
 
 /* Accounts Section */
 .accounts-section {
     background: var(--white);
-    border: 2px solid var(--primary);
+    border: 2px solid var(--border);
     border-radius: 6px;
     padding: 16px;
     margin-bottom: 16px;
@@ -538,7 +707,7 @@ body {
 
 .account-category h4 {
     font-size: 12px;
-    color: var(--primary);
+    color: var(--data-actual);
     margin-bottom: 6px;
     font-weight: 700;
 }
@@ -551,30 +720,30 @@ body {
 .account-category li {
     font-size: 11px;
     padding: 4px 0;
-    color: var(--dark);
+    color: var(--status-neutral);
 }
 
 .account-total {
     grid-column: 1 / -1;
     margin-top: 10px;
     padding-top: 14px;
-    border-top: 2px solid var(--light-accent);
+    border-top: 2px solid var(--border);
     text-align: center;
 }
 
 .account-total strong {
     display: block;
     font-size: 16px;
-    color: var(--primary);
+    color: var(--data-actual);
     margin-bottom: 8px;
 }
 
 .discrepancy {
     display: block;
-    color: #dc2626;
+    color: var(--status-bad);
     font-weight: 600;
     font-size: 12px;
-    background: #fee2e2;
+    background: var(--status-bad-light);
     padding: 10px;
     border-radius: 6px;
     margin-top: 8px;
@@ -585,14 +754,14 @@ body {
     text-align: center;
     padding: 12px;
     background: var(--white);
-    border: 1px solid var(--primary);
+    border: 1px solid var(--border);
     border-radius: 4px;
     font-size: 10px;
-    color: var(--secondary);
+    color: var(--status-neutral);
 }
 
 .dashboard-footer.compact a {
-    color: var(--primary);
+    color: var(--brand-primary);
     text-decoration: none;
     font-weight: 600;
 }
@@ -610,6 +779,10 @@ body {
     }
 
     .goals-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .scenarios-grid {
         grid-template-columns: 1fr;
     }
 }
@@ -644,6 +817,7 @@ body {
 .summary-card,
 .follower-compact,
 .chart-section,
-.goal-card {
+.goal-card,
+.scenario-card {
     animation: fadeIn 0.4s ease forwards;
 }
