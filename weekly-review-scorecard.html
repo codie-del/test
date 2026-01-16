@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weekly Review Scorecard - Contrarian Thinking</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #ffffff;
+            color: #1a1a1a;
+            padding: 40px 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #ffffff;
+            border: 2px solid #1a1a1a;
+            box-shadow: 8px 8px 0 #1a1a1a;
+        }
+
+        /* Header Section */
+        .header {
+            background: #1a1a1a;
+            color: #ffffff;
+            padding: 40px 50px;
+            border-bottom: 4px solid #8B3A62;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .logo {
+            font-size: 14px;
+            font-weight: 300;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #8B3A62;
+        }
+
+        .week-date {
+            font-size: 14px;
+            font-weight: 300;
+            color: #ffffff;
+        }
+
+        .header h1 {
+            font-size: 48px;
+            font-weight: 700;
+            letter-spacing: -1px;
+            color: #ffffff;
+        }
+
+        /* Main Content */
+        .content {
+            padding: 50px;
+        }
+
+        .section {
+            margin-bottom: 50px;
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 25px;
+            color: #1a1a1a;
+            border-bottom: 3px solid #8B3A62;
+            padding-bottom: 10px;
+            letter-spacing: -0.5px;
+        }
+
+        /* Key Metrics Grid */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .metric-card {
+            background: #f8f8f8;
+            border: 2px solid #1a1a1a;
+            padding: 25px;
+            position: relative;
+        }
+
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: #8B3A62;
+        }
+
+        .metric-label {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .metric-value {
+            font-size: 42px;
+            font-weight: 700;
+            color: #1a1a1a;
+            line-height: 1;
+        }
+
+        .metric-unit {
+            font-size: 18px;
+            font-weight: 400;
+            color: #666;
+        }
+
+        .metric-input {
+            width: 100%;
+            font-size: 42px;
+            font-weight: 700;
+            border: none;
+            background: transparent;
+            border-bottom: 2px solid #8B3A62;
+            padding: 5px 0;
+            color: #1a1a1a;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .metric-input:focus {
+            outline: none;
+            border-bottom: 3px solid #8B3A62;
+        }
+
+        /* Benchmarks */
+        .benchmark-list {
+            background: #1a1a1a;
+            color: #ffffff;
+            padding: 30px;
+            border: 2px solid #1a1a1a;
+        }
+
+        .benchmark-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #333;
+        }
+
+        .benchmark-item:last-child {
+            border-bottom: none;
+        }
+
+        .benchmark-icon {
+            width: 30px;
+            height: 30px;
+            background: #8B3A62;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-weight: 700;
+        }
+
+        .benchmark-text {
+            font-size: 16px;
+            font-weight: 400;
+        }
+
+        /* Chart Section */
+        .chart-container {
+            background: #f8f8f8;
+            border: 2px solid #1a1a1a;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .chart {
+            width: 100%;
+            height: 300px;
+            background: #ffffff;
+            border: 2px solid #e0e0e0;
+            position: relative;
+            padding: 20px;
+        }
+
+        .chart-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* SVG Chart */
+        .line-chart {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Staff Leaderboard */
+        .leaderboard {
+            background: #ffffff;
+            border: 2px solid #1a1a1a;
+        }
+
+        .leaderboard-header {
+            background: #8B3A62;
+            color: #ffffff;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .leaderboard-title {
+            font-size: 18px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .prize-badge {
+            background: #1a1a1a;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .leaderboard-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .leaderboard-table thead {
+            background: #1a1a1a;
+            color: #ffffff;
+        }
+
+        .leaderboard-table th {
+            padding: 15px 30px;
+            text-align: left;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .leaderboard-table td {
+            padding: 20px 30px;
+            border-bottom: 1px solid #e0e0e0;
+            font-size: 16px;
+        }
+
+        .leaderboard-table tbody tr:nth-child(odd) {
+            background: #f8f8f8;
+        }
+
+        .leaderboard-table tbody tr:hover {
+            background: #f0f0f0;
+        }
+
+        .rank {
+            font-weight: 700;
+            color: #8B3A62;
+            font-size: 20px;
+        }
+
+        .staff-name {
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        .points {
+            font-weight: 700;
+            color: #1a1a1a;
+            font-size: 18px;
+        }
+
+        .mentions-count {
+            color: #666;
+            font-size: 14px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header {
+                padding: 30px 25px;
+            }
+
+            .header h1 {
+                font-size: 32px;
+            }
+
+            .content {
+                padding: 30px 25px;
+            }
+
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .leaderboard-table th,
+            .leaderboard-table td {
+                padding: 12px 15px;
+                font-size: 14px;
+            }
+        }
+
+        /* Footer Note */
+        .footer-note {
+            background: #f8f8f8;
+            border: 2px solid #1a1a1a;
+            border-top: 4px solid #8B3A62;
+            padding: 20px 30px;
+            margin-top: 30px;
+            font-size: 12px;
+            color: #666;
+            line-height: 1.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="brand">
+                <div class="logo">Contrarian Thinking</div>
+                <div class="week-date">Week Ending: <strong>January 16, 2026</strong></div>
+            </div>
+            <h1>Weekly Review Scorecard</h1>
+        </div>
+
+        <!-- Main Content -->
+        <div class="content">
+            <!-- Key Metrics Section -->
+            <div class="section">
+                <h2 class="section-title">Key Metrics (Weekly)</h2>
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-label">New Reviews This Week</div>
+                        <input type="number" class="metric-input" placeholder="0" value="12">
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Average Rating</div>
+                        <div class="metric-value">4.8 <span class="metric-unit">/ 5.0</span></div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">% Customers Asked In-Person</div>
+                        <input type="number" class="metric-input" placeholder="0" value="85" style="font-size: 36px;"><span class="metric-unit">%</span>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">% Receiving Automated Follow-Up</div>
+                        <input type="number" class="metric-input" placeholder="0" value="92" style="font-size: 36px;"><span class="metric-unit">%</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Target Benchmarks Section -->
+            <div class="section">
+                <h2 class="section-title">Target Benchmarks</h2>
+                <div class="benchmark-list">
+                    <div class="benchmark-item">
+                        <div class="benchmark-icon">✓</div>
+                        <div class="benchmark-text">Maintain consistent weekly growth (avoid spikes that trigger AI flags)</div>
+                    </div>
+                    <div class="benchmark-item">
+                        <div class="benchmark-icon">📈</div>
+                        <div class="benchmark-text">Steady upward trend line over 90 days</div>
+                    </div>
+                    <div class="benchmark-item">
+                        <div class="benchmark-icon">⚖️</div>
+                        <div class="benchmark-text">Balance in-person asks with automated follow-ups</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chart Section -->
+            <div class="section">
+                <h2 class="section-title">Review Volume Trend (12 Weeks)</h2>
+                <div class="chart-container">
+                    <div class="chart-title">Number of Reviews Per Week</div>
+                    <div class="chart">
+                        <svg class="line-chart" viewBox="0 0 1000 250" preserveAspectRatio="none">
+                            <!-- Grid lines -->
+                            <line x1="0" y1="250" x2="1000" y2="250" stroke="#e0e0e0" stroke-width="1"/>
+                            <line x1="0" y1="187.5" x2="1000" y2="187.5" stroke="#e0e0e0" stroke-width="1"/>
+                            <line x1="0" y1="125" x2="1000" y2="125" stroke="#e0e0e0" stroke-width="1"/>
+                            <line x1="0" y1="62.5" x2="1000" y2="62.5" stroke="#e0e0e0" stroke-width="1"/>
+                            <line x1="0" y1="0" x2="1000" y2="0" stroke="#e0e0e0" stroke-width="1"/>
+
+                            <!-- Data line (steady upward trend) -->
+                            <polyline
+                                fill="none"
+                                stroke="#8B3A62"
+                                stroke-width="3"
+                                points="0,230 83,220 166,210 249,205 332,195 415,185 498,180 581,170 664,165 747,155 830,145 913,140 1000,130"
+                            />
+
+                            <!-- Data points -->
+                            <circle cx="0" cy="230" r="5" fill="#8B3A62"/>
+                            <circle cx="83" cy="220" r="5" fill="#8B3A62"/>
+                            <circle cx="166" cy="210" r="5" fill="#8B3A62"/>
+                            <circle cx="249" cy="205" r="5" fill="#8B3A62"/>
+                            <circle cx="332" cy="195" r="5" fill="#8B3A62"/>
+                            <circle cx="415" cy="185" r="5" fill="#8B3A62"/>
+                            <circle cx="498" cy="180" r="5" fill="#8B3A62"/>
+                            <circle cx="581" cy="170" r="5" fill="#8B3A62"/>
+                            <circle cx="664" cy="165" r="5" fill="#8B3A62"/>
+                            <circle cx="747" cy="155" r="5" fill="#8B3A62"/>
+                            <circle cx="830" cy="145" r="5" fill="#8B3A62"/>
+                            <circle cx="913" cy="140" r="5" fill="#8B3A62"/>
+                            <circle cx="1000" cy="130" r="5" fill="#8B3A62"/>
+                        </svg>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-top: 15px; padding: 0 20px; font-size: 12px; color: #666;">
+                        <span>Week 1</span>
+                        <span>Week 4</span>
+                        <span>Week 8</span>
+                        <span>Week 12</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Staff Incentive Tracker Section -->
+            <div class="section">
+                <h2 class="section-title">Staff Incentive Tracker</h2>
+                <div class="leaderboard">
+                    <div class="leaderboard-header">
+                        <div class="leaderboard-title">Monthly Contest: January 2026</div>
+                        <div class="prize-badge">🏆 Prize Pool: $500 + PTO Hours</div>
+                    </div>
+                    <table class="leaderboard-table">
+                        <thead>
+                            <tr>
+                                <th>Rank</th>
+                                <th>Staff Member</th>
+                                <th>Points</th>
+                                <th>Name Mentions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="rank">1</td>
+                                <td class="staff-name">Sarah Johnson</td>
+                                <td class="points">24</td>
+                                <td class="mentions-count">24 reviews</td>
+                            </tr>
+                            <tr>
+                                <td class="rank">2</td>
+                                <td class="staff-name">Michael Chen</td>
+                                <td class="points">19</td>
+                                <td class="mentions-count">19 reviews</td>
+                            </tr>
+                            <tr>
+                                <td class="rank">3</td>
+                                <td class="staff-name">Emily Rodriguez</td>
+                                <td class="points">17</td>
+                                <td class="mentions-count">17 reviews</td>
+                            </tr>
+                            <tr>
+                                <td class="rank">4</td>
+                                <td class="staff-name">David Thompson</td>
+                                <td class="points">15</td>
+                                <td class="mentions-count">15 reviews</td>
+                            </tr>
+                            <tr>
+                                <td class="rank">5</td>
+                                <td class="staff-name">Jessica Martinez</td>
+                                <td class="points">13</td>
+                                <td class="mentions-count">13 reviews</td>
+                            </tr>
+                            <tr>
+                                <td class="rank">6</td>
+                                <td class="staff-name">James Wilson</td>
+                                <td class="points">11</td>
+                                <td class="mentions-count">11 reviews</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Footer Note -->
+            <div class="footer-note">
+                <strong>Note:</strong> This scorecard tracks internal staff performance only. All review generation follows Google's guidelines by encouraging authentic customer feedback without direct incentives to customers. Staff incentives are based on name mentions in organic reviews, promoting excellent customer service that naturally leads to positive feedback.
+            </div>
+        </div>
+    </div>
+</body>
+</html>
