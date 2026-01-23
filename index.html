@@ -62,13 +62,13 @@
         <main class="dashboard-main">
             <!-- Scenario Planning Section (shown when Scenarios view is active) -->
             <section class="scenarios-section" id="scenariosSection" style="display: none;">
-                <h2 class="section-title compact">📊 2026 Scenario Planning</h2>
+                <h2 class="section-title compact">2026 Scenario Planning</h2>
                 <div class="scenarios-grid">
                     <!-- Conservative Scenario -->
                     <div class="scenario-card conservative" data-scenario="conservative">
                         <div class="scenario-header">
-                            <h3 class="scenario-title">🛡️ Conservative</h3>
-                            <span class="scenario-badge survives">Survives</span>
+                            <h3 class="scenario-title">Conservative</h3>
+                            <span class="scenario-badge survives">Low Risk</span>
                         </div>
                         <p class="scenario-description">Slower growth, focus on profitability and cash preservation. Minimal new investments.</p>
                         <div class="scenario-metrics">
@@ -93,8 +93,8 @@
                     <!-- Base Case Scenario -->
                     <div class="scenario-card base selected" data-scenario="base">
                         <div class="scenario-header">
-                            <h3 class="scenario-title">🎯 Base Case</h3>
-                            <span class="scenario-badge strong">Strong Position</span>
+                            <h3 class="scenario-title">Base Case</h3>
+                            <span class="scenario-badge strong">Expected</span>
                         </div>
                         <p class="scenario-description">Expected growth trajectory based on current trends. Balanced investment in growth and profitability.</p>
                         <div class="scenario-metrics">
@@ -119,8 +119,8 @@
                     <!-- Upside Scenario -->
                     <div class="scenario-card upside" data-scenario="upside">
                         <div class="scenario-header">
-                            <h3 class="scenario-title">🚀 Upside</h3>
-                            <span class="scenario-badge strong">Strong Position</span>
+                            <h3 class="scenario-title">Upside</h3>
+                            <span class="scenario-badge strong">High Growth</span>
                         </div>
                         <p class="scenario-description">Accelerated growth with strong referrals and new product launches. Aggressive expansion.</p>
                         <div class="scenario-metrics">
@@ -147,7 +147,7 @@
             <!-- Monthly Financial Summary -->
             <section class="summary-section monthly">
                 <div class="summary-header">
-                    <h2 class="section-title compact">📊 Monthly Summary - <span id="currentMonthYear"></span></h2>
+                    <h2 class="section-title compact">Monthly Summary — <span id="currentMonthYear"></span></h2>
                 </div>
                 <div class="summary-grid">
                     <div class="summary-card revenue-card">
@@ -197,7 +197,7 @@
             <!-- Yearly Financial Summary -->
             <section class="summary-section yearly">
                 <div class="summary-header">
-                    <h2 class="section-title compact">📈 Year-to-Date Summary - 2026</h2>
+                    <h2 class="section-title compact">Year-to-Date Summary — 2026</h2>
                 </div>
                 <div class="summary-grid">
                     <div class="summary-card revenue-card-ytd">
@@ -234,11 +234,11 @@
             <!-- Followers Summary -->
             <section class="summary-section followers">
                 <div class="summary-header">
-                    <h2 class="section-title compact">👥 Follower Metrics</h2>
+                    <h2 class="section-title compact">Follower Metrics</h2>
                 </div>
                 <div class="followers-compact-grid">
                     <div class="follower-compact instagram">
-                        <span class="platform-icon">📷</span>
+                        <span class="platform-icon">•</span>
                         <div class="platform-data">
                             <div class="platform-name">Instagram</div>
                             <div class="platform-count" id="instagramCount">0</div>
@@ -250,7 +250,7 @@
                     </div>
 
                     <div class="follower-compact youtube">
-                        <span class="platform-icon">📺</span>
+                        <span class="platform-icon">•</span>
                         <div class="platform-data">
                             <div class="platform-name">YouTube</div>
                             <div class="platform-count" id="youtubeCount">0</div>
@@ -262,7 +262,7 @@
                     </div>
 
                     <div class="follower-compact tiktok">
-                        <span class="platform-icon">🎵</span>
+                        <span class="platform-icon">•</span>
                         <div class="platform-data">
                             <div class="platform-name">TikTok</div>
                             <div class="platform-count" id="tiktokCount">0</div>
@@ -274,7 +274,7 @@
                     </div>
 
                     <div class="follower-compact twitter">
-                        <span class="platform-icon">🐦</span>
+                        <span class="platform-icon">•</span>
                         <div class="platform-data">
                             <div class="platform-name">Twitter/X</div>
                             <div class="platform-count" id="twitterCount">0</div>
@@ -286,7 +286,7 @@
                     </div>
 
                     <div class="follower-compact linkedin">
-                        <span class="platform-icon">💼</span>
+                        <span class="platform-icon">•</span>
                         <div class="platform-data">
                             <div class="platform-name">LinkedIn</div>
                             <div class="platform-count" id="linkedinCount">0</div>
@@ -298,7 +298,7 @@
                     </div>
 
                     <div class="follower-compact facebook">
-                        <span class="platform-icon">👍</span>
+                        <span class="platform-icon">•</span>
                         <div class="platform-data">
                             <div class="platform-name">Facebook</div>
                             <div class="platform-count" id="facebookCount">0</div>
@@ -310,9 +310,9 @@
                     </div>
 
                     <div class="follower-compact total">
-                        <span class="platform-icon">🌟</span>
+                        <span class="platform-icon"></span>
                         <div class="platform-data">
-                            <div class="platform-name">TOTAL</div>
+                            <div class="platform-name">Total</div>
                             <div class="platform-count large" id="totalFollowers">0</div>
                             <div class="platform-meta">
                                 <span class="pacing" id="followersPacing">--</span>
@@ -353,11 +353,11 @@
 
             <!-- Goals Tracker -->
             <section class="goals-section compact">
-                <h2 class="section-title compact">🎯 2026 Goals Progress</h2>
+                <h2 class="section-title compact">2026 Goals Progress</h2>
                 <div class="goals-grid">
                     <div class="goal-card compact">
                         <div class="goal-header-compact">
-                            <h3>Revenue Goal: $45M</h3>
+                            <h3>Revenue Goal — $45M</h3>
                             <div class="goal-stats">
                                 <span class="goal-current" id="revenueGoalCurrent">$0</span>
                                 <span class="goal-percent" id="revenueGoalPercent">0%</span>
@@ -375,7 +375,7 @@
 
                     <div class="goal-card compact">
                         <div class="goal-header-compact">
-                            <h3>Follower Goal: 18M</h3>
+                            <h3>Follower Goal — 18M</h3>
                             <div class="goal-stats">
                                 <span class="goal-current" id="followerGoalCurrent">0</span>
                                 <span class="goal-percent" id="followerGoalPercent">0%</span>
@@ -395,7 +395,7 @@
 
             <!-- Account Verification Section -->
             <section class="accounts-section">
-                <h2 class="section-title compact">🔍 Tracked Social Media Accounts</h2>
+                <h2 class="section-title compact">Tracked Social Media Accounts</h2>
                 <div class="accounts-list">
                     <div class="account-category">
                         <h4>Instagram (3 accounts)</h4>
@@ -439,15 +439,15 @@
                     </div>
                     <div class="account-total">
                         <strong>Current Total: 8.49M followers</strong>
-                        <span class="discrepancy">⚠️ Your Notion shows 11.67M - Missing ~3.18M. Please verify which accounts or platforms are missing!</span>
+                        <span class="discrepancy">Note: Your Notion shows 11.67M - Missing approximately 3.18M. Please verify which accounts or platforms are missing.</span>
                     </div>
                 </div>
             </section>
         </main>
 
-        <!-- Compact Footer -->
+        <!-- Minimal Footer -->
         <footer class="dashboard-footer compact">
-            <p>Last Updated: <span id="lastUpdated"></span> | Phase 1: Real Data | <a href="README.md">Setup Guide</a></p>
+            <p>Last Updated: <span id="lastUpdated"></span> · <a href="README.md">Setup Guide</a></p>
         </footer>
     </div>
 
